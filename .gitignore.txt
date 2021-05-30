@@ -1,3 +1,0 @@
-.vs
-/Debug
-/GameProgrammingSS2021/Debug
