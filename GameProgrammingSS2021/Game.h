@@ -4,6 +4,7 @@
 
 #define SDL_MAIN_HANDLED
 #include "SDL.h""
+#include "SDL_image.h"
 #include <iostream>
 
 class Game {
@@ -23,6 +24,10 @@ public:
 
 private:
 	int cnt = 0;
+	int x = 0;
+	int y = 0;
+	bool richtung = true;
+	bool runterBewegen = false;
 	bool isRunning;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
