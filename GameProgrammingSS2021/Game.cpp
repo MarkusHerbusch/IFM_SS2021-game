@@ -8,7 +8,7 @@ Game::Game()
 Game::~Game()
 {}
 
-void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen)
+void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int width, int height, bool fullscreen)
 {
 	int flags = 0;
 	if (fullscreen)
@@ -39,7 +39,37 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 		isRunning = false;
 	}
 
-	SDL_Surface* tmpSurface = IMG_Load("assets/character.png");
+	SDL_Surface* tmpSurface = NULL;
+
+	if (farbeSpieler == 1) 
+	{
+		tmpSurface = IMG_Load("images/SpielerBlau.png");	
+	}
+	else if (farbeSpieler == 2)
+	{
+		tmpSurface = IMG_Load("images/SpielerGelb.png");
+	}
+	else if (farbeSpieler == 3)
+	{
+		tmpSurface = IMG_Load("images/SpielerGruen.png");
+	}
+	else if (farbeSpieler == 4)
+	{
+		tmpSurface = IMG_Load("images/SpielerHellblau.png");
+	}
+	else if (farbeSpieler == 5)
+	{
+		tmpSurface = IMG_Load("images/SpielerPink.png");
+	}
+	else if (farbeSpieler == 6)
+	{
+		tmpSurface = IMG_Load("images/SpielerViolett.png");
+	}
+	else if (farbeSpieler == 7)
+	{
+		tmpSurface = IMG_Load("images/SpielerWeiss.png");
+	}
+
 	playerTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
 	SDL_FreeSurface(tmpSurface);
 }
