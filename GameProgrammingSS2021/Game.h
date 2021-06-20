@@ -24,12 +24,19 @@ public:
 
 	bool running() { return isRunning; }
 
+
 private:
-	int cnt = 0;
+	int cnt = 0; //zum Anzeigen auf der Konsole
 	int x = 0;
 	int y = 0;
-	bool richtung = true;
-	bool runterBewegen = false;
+
+	bool MoveRight = false;
+	bool MoveLeft = false;
+	bool MoveUp = false;
+	bool MoveDown = false;
+
+	int geschwindigkeit = 2;
+
 	bool isRunning;
 	SDL_Window* window;
 	SDL_Renderer* renderer;

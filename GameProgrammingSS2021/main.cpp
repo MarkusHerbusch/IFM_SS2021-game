@@ -26,7 +26,7 @@ int main(int argc, const char* argv[])
 	cin >> farbeSpieler;
 
 
-	game->init("Spiel", farbeSpieler, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
+	game->init("Spiel", farbeSpieler, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1500, 800, false);
 
 	while (game->running()) {
 

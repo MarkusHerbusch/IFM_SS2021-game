@@ -84,6 +84,112 @@ void Game::handleEvents()
 			isRunning = false;
 			break;
 
+
+		case SDL_KEYDOWN:
+			switch (event.key.keysym.sym)
+			{
+			case SDLK_a:
+				MoveLeft = true;
+				break;
+
+			case SDLK_d:
+				MoveRight = true;
+				break;
+
+			case SDLK_w:
+				MoveUp = true;
+				break;
+
+			case SDLK_s:
+				MoveDown = true;
+				break;
+
+			case SDLK_LEFT:
+				MoveLeft = true;
+				break;
+
+			case SDLK_RIGHT:
+				MoveRight = true;
+				break;
+
+			case SDLK_UP:
+				MoveUp = true;
+				break;
+
+			case SDLK_DOWN:
+				MoveDown = true;
+				break;
+
+			case SDLK_1:
+				geschwindigkeit = 1;
+				break;
+
+			case SDLK_2:
+				geschwindigkeit = 2;
+				break;
+
+			case SDLK_3:
+				geschwindigkeit = 3;
+				break;
+
+			case SDLK_4:
+				geschwindigkeit = 4;
+				break;
+
+			case SDLK_5:
+				geschwindigkeit = 5;
+				break;
+
+			case SDLK_6:
+				geschwindigkeit = 6;
+				break;
+
+			default:
+				break;
+			}
+			break;
+		
+
+		case SDL_KEYUP:
+			switch (event.key.keysym.sym)
+			{
+			case SDLK_a:
+				MoveLeft = false;
+				break;
+
+			case SDLK_d:
+				MoveRight = false;
+				break;
+
+			case SDLK_w:
+				MoveUp = false;
+				break;
+
+			case SDLK_s:
+				MoveDown = false;
+				break;
+
+			case SDLK_LEFT:
+				MoveLeft = false;
+				break;
+
+			case SDLK_RIGHT:
+				MoveRight = false;
+				break;
+
+			case SDLK_UP:
+				MoveUp = false;
+				break;
+
+			case SDLK_DOWN:
+				MoveDown = false;
+				break;
+
+			default:
+				break;
+			}
+			break;
+
 		default:
 			break;
 	}
@@ -94,46 +200,30 @@ void Game::update()
 	cnt++;
 	std::cout << cnt << std::endl;
 	
+	//Höhe und Breite des Charakters
 	destR.h = 75;
 	destR.w = 75;
 	
-	//800*600
-	if (!runterBewegen) {
-		if (richtung) {
-			destR.x = x++;
-		}
-		else {
-			destR.x = x--;
-		}
+
+	//Spielfeldgröße: 1500*800 
+
+	if (MoveRight && x <= 1425) {
+		x = x + geschwindigkeit;
+		destR.x = x;
 	}
-	
-	if (x == 725)
-	{
-		richtung = false;
-		runterBewegen = true;
-		y++;
+	if (MoveLeft && x >= 0) {
+		x = x - geschwindigkeit;
+		destR.x = x;
+	}
+	if (MoveUp && y >= 0) {
+		y = y - geschwindigkeit;
+		destR.y = y;
+	}
+	if (MoveDown && y <= 725) {
+		y = y + geschwindigkeit;
+		destR.y = y;
 	}
 
-	if (x == 0)
-	{
-		richtung = true;
-		runterBewegen = true;
-		y++;
-	}
-
-	if (runterBewegen) {
-		if (y % 75 != 0) {
-			destR.y = y++;
-		}
-		else {
-			runterBewegen = false;
-		}
-	}
-
-	if (y == 525)
-	{
-		y = 0;
-	}
 	
 }
 
