@@ -207,24 +207,36 @@ void Game::update()
 
 	//Spielfeldgröße: 1500*800 
 
-	if (MoveRight && x <= 1425) {
+	
+	if (MoveRight && x < 1425) {
 		x = x + geschwindigkeit;
+		if (x > 1425) {
+			x = 1425;
+		}
 		destR.x = x;
 	}
-	if (MoveLeft && x >= 0) {
+	if (MoveLeft && x > 0) {
 		x = x - geschwindigkeit;
+		if (x < 0) {
+			x = 0;
+		}
 		destR.x = x;
 	}
-	if (MoveUp && y >= 0) {
+	if (MoveUp && y > 0) {
 		y = y - geschwindigkeit;
+		if (y < 0) {
+			y = 0;
+		}
 		destR.y = y;
 	}
-	if (MoveDown && y <= 725) {
+	if (MoveDown && y < 725) {
 		y = y + geschwindigkeit;
+		if (y > 725) {
+			y = 725;
+		}
 		destR.y = y;
 	}
 
-	
 }
 
 void Game::render()
