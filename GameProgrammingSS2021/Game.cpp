@@ -1,7 +1,12 @@
 #include "Game.h"
+#include "TextureManager.h"
+#include "Map.h"
 
 SDL_Texture* playerTex;
 SDL_Rect scrR, destR;
+
+Map* map;
+SDL_Renderer* Game::renderer = nullptr;
 
 Game::Game()
 {}
@@ -29,7 +34,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 		renderer = SDL_CreateRenderer(window, -1, 0);
 		if (renderer)
 		{
-			SDL_SetRenderDrawColor(renderer, 255, 127, 0, 0);
+			SDL_SetRenderDrawColor(renderer, 0, 127, 0, 0);
 			std::cout << "Renderer created" << std::endl;
 		}
 
@@ -72,6 +77,8 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 
 	playerTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
 	SDL_FreeSurface(tmpSurface);
+
+	map = new Map();
 }
 
 void Game::handleEvents()
@@ -242,6 +249,7 @@ void Game::update()
 void Game::render()
 {
 	SDL_RenderClear(renderer);
+	map->DrawMap();
 	//this is where we would add stuff to render
 	SDL_RenderCopy(renderer, playerTex, NULL, &destR);
 

@@ -24,6 +24,8 @@ public:
 
 	bool running() { return isRunning; }
 
+	static SDL_Renderer* renderer;
+
 
 private:
 	int cnt = 0; //zum Anzeigen auf der Konsole
@@ -39,7 +41,6 @@ private:
 
 	bool isRunning;
 	SDL_Window* window;
-	SDL_Renderer* renderer;
 };
 
 #endif /* Game_h*/
