@@ -8,7 +8,7 @@ public:
 	Map();
 	~Map();
 
-	void LoadMap(int arr[20][25]);
+	void LoadMap(int arr[25][50]);
 	void DrawMap();
 
 private:
@@ -18,6 +18,8 @@ private:
 
 	SDL_Texture* limitation;
 	SDL_Texture* background;
+	SDL_Texture* backgroundLimitRight;
+	SDL_Texture* backgroundLimitBelow;
 
-	int map[20][25];
+	int map[25][50];
 };

@@ -29,8 +29,8 @@ public:
 
 private:
 	int cnt = 0; //zum Anzeigen auf der Konsole
-	int x = 0;
-	int y = 0;
+	int x = 200;
+	int y = 200;
 
 	bool MoveRight = false;
 	bool MoveLeft = false;

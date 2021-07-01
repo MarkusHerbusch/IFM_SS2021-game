@@ -79,6 +79,8 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	SDL_FreeSurface(tmpSurface);
 
 	map = new Map();
+	destR.x = 200;
+	destR.y = 200;
 }
 
 void Game::handleEvents()
@@ -212,34 +214,34 @@ void Game::update()
 	destR.w = 75;
 	
 
-	//Spielfeldgröße: 1500*800 
+	//Spielfeldgröße: 1600*800 
 
 	
-	if (MoveRight && x < 1425) {
+	if (MoveRight && x < 1493) {
 		x = x + geschwindigkeit;
-		if (x > 1425) {
-			x = 1425;
+		if (x > 1493) {
+			x = 1493;
 		}
 		destR.x = x;
 	}
-	if (MoveLeft && x > 0) {
+	if (MoveLeft && x > 192) {
 		x = x - geschwindigkeit;
-		if (x < 0) {
-			x = 0;
+		if (x < 192) {
+			x = 192;
 		}
 		destR.x = x;
 	}
-	if (MoveUp && y > 0) {
+	if (MoveUp && y > 64) {
 		y = y - geschwindigkeit;
-		if (y < 0) {
-			y = 0;
+		if (y < 64) {
+			y = 64;
 		}
 		destR.y = y;
 	}
-	if (MoveDown && y < 725) {
+	if (MoveDown && y < 693) {
 		y = y + geschwindigkeit;
-		if (y > 725) {
-			y = 725;
+		if (y > 693) {
+			y = 693;
 		}
 		destR.y = y;
 	}
