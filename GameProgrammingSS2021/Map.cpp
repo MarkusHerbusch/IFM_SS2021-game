@@ -42,7 +42,8 @@ Map::Map()
 	background = TextureManager::LoadTexture("images/background.png");
 	backgroundLimitRight = TextureManager::LoadTexture("images/backgroundLimitRight.png");
 	backgroundLimitBelow = TextureManager::LoadTexture("images/backgroundLimitBelow.png");
-	
+	redPoint = TextureManager::LoadTexture("images/RedPoint.png");
+
 	LoadMap(level1);
 
 	src.x = src.y = 0;
@@ -90,6 +91,9 @@ void Map::DrawMap()
 			case 4:
 				TextureManager::Draw(backgroundLimitBelow, src, dest);
 				break;
+			case 5:
+				TextureManager::Draw(redPoint, src, dest);
+				break;
 			default:
 				break;
 			}
@@ -111,7 +115,7 @@ struct IntPair Map::ChangeMapAddPoint()
 	cout << "Zahl1: " << randomNumber1 << endl;
 	cout << "Zahl2: " << randomNumber2 << endl;
 
-	level1[randomNumber1][randomNumber2] = 2;
+	level1[randomNumber1][randomNumber2] = 5;
 	Map::LoadMap(level1);
 
 	struct IntPair ret;

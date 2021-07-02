@@ -24,6 +24,7 @@ private:
 	SDL_Texture* background;
 	SDL_Texture* backgroundLimitRight;
 	SDL_Texture* backgroundLimitBelow;
+	SDL_Texture* redPoint;
 
 	int map[25][50];
 };
