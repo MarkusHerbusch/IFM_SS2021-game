@@ -5,6 +5,10 @@
 SDL_Texture* playerTex;
 SDL_Rect scrR, destR;
 
+struct IntPair {
+	int first, second;
+};
+
 Map* map;
 SDL_Renderer* Game::renderer = nullptr;
 
@@ -207,7 +211,29 @@ void Game::handleEvents()
 void Game::update()
 {
 	cnt++;
-	std::cout << cnt << std::endl;
+	//std::cout << cnt << std::endl;
+
+	if (cnt == 200 && arrayFuellmenge < 10)
+	{
+		int zahlX;
+		int zahlY;
+
+		
+
+		struct IntPair ret;
+
+		ret = map->ChangeMapAddPoint();
+
+		zahlX = ret.second;
+		zahlY = ret.first;
+
+		cout << zahlX << zahlY;
+
+		points[arrayFuellmenge][0] = zahlX;
+		points[arrayFuellmenge][1] = zahlY;
+		arrayFuellmenge++;
+	}
+	
 	
 	//Höhe und Breite des Charakters
 	destR.h = 75;
@@ -244,6 +270,21 @@ void Game::update()
 			y = 693;
 		}
 		destR.y = y;
+	}
+
+	if (arrayFuellmenge == 1)
+	{
+		int pointX = points[0][0] * 32 + 16;
+		int pointY = points[0][1] * 32 + 16;
+
+
+		if (x >= pointX - 75 && x <= pointX && y >= pointY - 75 && y <= pointY)
+		{
+			cout << "Punkt erreicht";
+		}
+		
+
+
 	}
 
 }

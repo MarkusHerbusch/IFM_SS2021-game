@@ -32,6 +32,9 @@ private:
 	int x = 200;
 	int y = 200;
 
+	int points[10][2];
+	int arrayFuellmenge = 0;
+
 	bool MoveRight = false;
 	bool MoveLeft = false;
 	bool MoveUp = false;

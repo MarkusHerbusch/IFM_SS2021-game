@@ -1,5 +1,7 @@
 #include "Map.h"
 #include "TextureManager.h"
+#include <random>
+#include <ctime>
 
 
 int level1[25][50] = {
@@ -28,6 +30,10 @@ int level1[25][50] = {
 	{ 2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 	{ 2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 	{ 2,2,2,2,2,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
+};
+
+struct IntPair {
+	int first, second;
 };
 
 Map::Map()
@@ -89,4 +95,28 @@ void Map::DrawMap()
 			}
 		}
 	}
+}
+
+struct IntPair Map::ChangeMapAddPoint()
+{
+	//Spielfeldbereich: [2][6] bis [23][48]
+	// 22 Möglichkeiten, 43 Möglichkeiten
+
+
+	std::srand(std::time(nullptr));
+
+	int randomNumber1 = (rand() % 22) + 2;
+	int randomNumber2 = (rand() % 43) + 6;
+
+	cout << "Zahl1: " << randomNumber1 << endl;
+	cout << "Zahl2: " << randomNumber2 << endl;
+
+	level1[randomNumber1][randomNumber2] = 2;
+	Map::LoadMap(level1);
+
+	struct IntPair ret;
+	ret.first = randomNumber1;
+	ret.second = randomNumber2;
+
+	return ret;
 }

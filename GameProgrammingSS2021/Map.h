@@ -8,11 +8,14 @@ public:
 	Map();
 	~Map();
 
+
+
 	void LoadMap(int arr[25][50]);
 	void DrawMap();
+	struct IntPair  ChangeMapAddPoint();
 
 private:
-
+	
 	SDL_Rect src, dest;
 	SDL_Renderer* renderer;
 
