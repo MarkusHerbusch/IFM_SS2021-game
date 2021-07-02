@@ -213,7 +213,8 @@ void Game::update()
 	cnt++;
 	//std::cout << cnt << std::endl;
 
-	if (cnt == 200 && arrayFuellmenge < 10)
+	//Punkt auf Karte erzeugen
+	if (cnt % 200 == 0 && arrayFuellmenge < 10 && counterPoints < 15)
 	{
 		int zahlX;
 		int zahlY;
@@ -232,6 +233,7 @@ void Game::update()
 		points[arrayFuellmenge][0] = zahlX;
 		points[arrayFuellmenge][1] = zahlY;
 		arrayFuellmenge++;
+		counterPoints++;
 	}
 	
 	
@@ -272,19 +274,31 @@ void Game::update()
 		destR.y = y;
 	}
 
-	if (arrayFuellmenge == 1)
+	//Punkt wieder von der Karte entfernen
+	if (arrayFuellmenge > 0)
 	{
-		int pointX = points[0][0] * 32 + 16;
-		int pointY = points[0][1] * 32 + 16;
-
-
-		if (x >= pointX - 75 && x <= pointX && y >= pointY - 75 && y <= pointY)
+		for (int i = 0; i < arrayFuellmenge; i++)
 		{
-			cout << "Punkt erreicht";
-			map->ChangeMapRemovePoint(points[0][1], points[0][0]);
-			//array umschreiben
-			arrayFuellmenge--;
+			int pointX = points[i][0] * 32 + 16;
+			int pointY = points[i][1] * 32 + 16;
+
+
+			if (x >= pointX - 75 && x <= pointX && y >= pointY - 75 && y <= pointY)
+			{
+				cout << "Punkt erreicht";
+				map->ChangeMapRemovePoint(points[i][1], points[i][0]);
+				
+				//array umschreiben
+				for (int j = i; j < arrayFuellmenge-1; j++) {
+					points[j][0] = points[j + 1][0];
+					points[j][1] = points[j + 1][1];
+				}
+
+				arrayFuellmenge--;
+			}
+
 		}
+		
 		
 
 
