@@ -120,3 +120,9 @@ struct IntPair Map::ChangeMapAddPoint()
 
 	return ret;
 }
+
+void Map::ChangeMapRemovePoint(int row, int column)
+{
+	level1[row][column] = 0;
+	Map::LoadMap(level1);
+}

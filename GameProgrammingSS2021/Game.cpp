@@ -281,6 +281,9 @@ void Game::update()
 		if (x >= pointX - 75 && x <= pointX && y >= pointY - 75 && y <= pointY)
 		{
 			cout << "Punkt erreicht";
+			map->ChangeMapRemovePoint(points[0][1], points[0][0]);
+			//array umschreiben
+			arrayFuellmenge--;
 		}
 		
 
