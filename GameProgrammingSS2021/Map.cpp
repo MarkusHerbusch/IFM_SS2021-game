@@ -5,8 +5,8 @@
 
 
 int level1[25][50] = {
-	{ 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2 },
-	{ 2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+	{ 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,5,5,5,5,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2 },
+	{ 2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
 	{ 2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 	{ 2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 	{ 2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
@@ -42,6 +42,8 @@ Map::Map()
 	background = TextureManager::LoadTexture("images/background.png");
 	backgroundLimitRight = TextureManager::LoadTexture("images/backgroundLimitRight.png");
 	backgroundLimitBelow = TextureManager::LoadTexture("images/backgroundLimitBelow.png");
+	backgroundBlue = TextureManager::LoadTexture("images/backgroundBlue.png");
+	backgroundBlueLimitBelow = TextureManager::LoadTexture("images/backgroundBlueLimitBelow.png");
 	redPoint = TextureManager::LoadTexture("images/RedPoint.png");
 
 	LoadMap(level1);
@@ -92,6 +94,12 @@ void Map::DrawMap()
 				TextureManager::Draw(backgroundLimitBelow, src, dest);
 				break;
 			case 5:
+				TextureManager::Draw(backgroundBlue, src, dest);
+				break;
+			case 6:
+				TextureManager::Draw(backgroundBlueLimitBelow, src, dest);
+				break;
+			case 7:
 				TextureManager::Draw(redPoint, src, dest);
 				break;
 			default:
@@ -115,7 +123,7 @@ struct IntPair Map::ChangeMapAddPoint()
 	cout << "Zahl1: " << randomNumber1 << endl;
 	cout << "Zahl2: " << randomNumber2 << endl;
 
-	level1[randomNumber1][randomNumber2] = 5;
+	level1[randomNumber1][randomNumber2] = 7;
 	Map::LoadMap(level1);
 
 	struct IntPair ret;

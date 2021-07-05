@@ -8,11 +8,18 @@
 SDL_Texture* playerTex;
 SDL_Texture* textScoreTex;
 SDL_Texture* scoreTex;
+SDL_Texture* timeMinutesTex;
+SDL_Texture* timeSeconds1Tex;
+SDL_Texture* timeSeconds2Tex;
+SDL_Texture* timePointTex;
 SDL_Rect scrR, destR;
 SDL_Rect textScoreR;
 SDL_Rect scoreR;
+SDL_Rect timeMinutesR, timeSeconds1R, timeSeconds2R, timePointR;
 TTF_Font* font42;
 SDL_Color yellow = { 255, 255, 0 };
+SDL_Color black = { 0, 0, 0 };
+SDL_Color colorTime = { 0, 255, 0 };
 
 
 struct IntPair {
@@ -109,7 +116,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 		std::cerr << "Konnte Schriftart nicht laden! Fehler: " << TTF_GetError() << std::endl;
 	}
 
-
+	//Anzeige Text Score
 	SDL_Surface* textScoreS = TTF_RenderText_Solid(font42, "Score:", yellow);
 	textScoreTex = SDL_CreateTextureFromSurface(renderer, textScoreS);
 	SDL_FreeSurface(textScoreS);
@@ -123,7 +130,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	textScoreR.w = wTextScore;
 	textScoreR.h = hTextScore;
 
-
+	//Anzeige Score
 	SDL_Surface* scoreS = TTF_RenderText_Solid(font42, "0", yellow);
 	scoreTex = SDL_CreateTextureFromSurface(renderer, scoreS);
 	SDL_FreeSurface(scoreS);
@@ -136,6 +143,59 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	scoreR.y = 10;
 	scoreR.w = wScore;
 	scoreR.h = hScore;
+
+	//Anzeige Minuten
+	SDL_Surface* timeMinutesS = TTF_RenderText_Solid(font42, "2", colorTime);
+	timeMinutesTex = SDL_CreateTextureFromSurface(renderer, timeMinutesS);
+	SDL_FreeSurface(timeMinutesS);
+
+	int wMinutes = 0;
+	int hMinutes = 0;
+	TTF_SizeText(font42, "2", &wMinutes, &hMinutes);
+	std::cout << "Width : " << wMinutes << "\nHeight: " << hMinutes << std::endl;
+	timeMinutesR.x = 800;
+	timeMinutesR.y = 10;
+	timeMinutesR.w = wMinutes;
+	timeMinutesR.h = hMinutes;
+
+	//Anzeige Sekunden1
+	SDL_Surface* timeSeconds1S = TTF_RenderText_Solid(font42, "0", colorTime);
+	timeSeconds1Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds1S);
+	SDL_FreeSurface(timeSeconds1S);
+
+	int wSeconds1 = 0;
+	int hSeconds1 = 0;
+	TTF_SizeText(font42, "0", &wSeconds1, &hSeconds1);
+	timeSeconds1R.x = 850;
+	timeSeconds1R.y = 10;
+	timeSeconds1R.w = wSeconds1;
+	timeSeconds1R.h = hSeconds1;
+
+	//Anzeige Sekunden2
+	SDL_Surface* timeSeconds2S = TTF_RenderText_Solid(font42, "0", colorTime);
+	timeSeconds2Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds2S);
+	SDL_FreeSurface(timeSeconds2S);
+
+	int wSeconds2 = 0;
+	int hSeconds2 = 0;
+	TTF_SizeText(font42, "0", &wSeconds2, &hSeconds2);
+	timeSeconds2R.x = 880;
+	timeSeconds2R.y = 10;
+	timeSeconds2R.w = wSeconds2;
+	timeSeconds2R.h = hSeconds2;
+
+	//Anzeige Time-Point
+	SDL_Surface* timePointS = TTF_RenderText_Solid(font42, ":", black);
+	timePointTex = SDL_CreateTextureFromSurface(renderer, timePointS);
+	SDL_FreeSurface(timePointS);
+
+	int wTimePoint = 0;
+	int hTimePoint = 0;
+	TTF_SizeText(font42, ":", &wTimePoint, &hTimePoint);
+	timePointR.x = 830;
+	timePointR.y = 8;
+	timePointR.w = wTimePoint;
+	timePointR.h = hTimePoint;
 
 	/**TTF_Init();
 	TTF_Quit();
@@ -289,8 +349,84 @@ void Game::update()
 	cnt++;
 	//std::cout << cnt << std::endl;
 
+	if (cnt % 60 == 0)
+	{
+
+		if (sekunden2 == 0)
+		{
+			sekunden2 = 9;
+
+			if (sekunden1 == 0)
+			{
+				sekunden1 = 5;
+				minuten--;
+				if (minuten == 0)
+				{
+					colorTime = { 255, 255, 0 };
+				}
+
+			}
+			else
+			{
+				sekunden1--;
+			}
+			
+		}
+		else
+		{
+			sekunden2--;
+			if (minuten == 0 && sekunden1 == 1 && sekunden2 == 5)
+			{
+				colorTime = { 255, 0, 0 };
+			}
+
+			if (minuten == 0 && sekunden1 == 3 && sekunden2 == 0)
+			{
+				colorTime = { 255, 165, 0 };
+			}
+		}
+		
+		//Minuten
+		std::string tmp1 = std::to_string(minuten);
+		char const* minutes_char = tmp1.c_str();
+		SDL_Surface* timeMinutesS = TTF_RenderText_Solid(font42, minutes_char, colorTime);
+		timeMinutesTex = SDL_CreateTextureFromSurface(renderer, timeMinutesS);
+		SDL_FreeSurface(timeMinutesS);
+		int wMinutes = 0;
+		int hMinutes = 0;
+		TTF_SizeText(font42, minutes_char, &wMinutes, &hMinutes);
+		timeMinutesR.w = wMinutes;
+		timeMinutesR.h = hMinutes;
+
+		//Anzeige Sekunden1
+		std::string tmp2 = std::to_string(sekunden1);
+		char const* seconds1_char = tmp2.c_str();
+		SDL_Surface* timeSeconds1S = TTF_RenderText_Solid(font42, seconds1_char, colorTime);
+		timeSeconds1Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds1S);
+		SDL_FreeSurface(timeSeconds1S);
+		int wSeconds1 = 0;
+		int hSeconds1 = 0;
+		TTF_SizeText(font42, seconds1_char, &wSeconds1, &hSeconds1);
+		timeSeconds1R.w = wSeconds1;
+		timeSeconds1R.h = hSeconds1;
+
+		//Anzeige Sekunden2
+		std::string tmp3 = std::to_string(sekunden2);
+		char const* seconds2_char = tmp3.c_str();
+		SDL_Surface* timeSeconds2S = TTF_RenderText_Solid(font42, seconds2_char, colorTime);
+		timeSeconds2Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds2S);
+		SDL_FreeSurface(timeSeconds2S);
+		int wSeconds2 = 0;
+		int hSeconds2 = 0;
+		TTF_SizeText(font42, seconds2_char, &wSeconds2, &hSeconds2);
+		timeSeconds2R.w = wSeconds2;
+		timeSeconds2R.h = hSeconds2;
+		
+	}
+
+
 	//Punkt auf Karte erzeugen
-	if (cnt % 200 == 0 && arrayFuellmenge < 10 && counterPoints < 15)
+	if (cnt % 120 == 0 && arrayFuellmenge < 10 && counterPoints < 15)
 	{
 		int zahlX;
 		int zahlY;
@@ -403,7 +539,11 @@ void Game::render()
 	SDL_RenderCopy(renderer, playerTex, NULL, &destR);
 	SDL_RenderCopy(renderer, textScoreTex, NULL, &textScoreR);
 	SDL_RenderCopy(renderer, scoreTex, NULL, &scoreR);
-
+	SDL_RenderCopy(renderer, timeMinutesTex, NULL, &timeMinutesR);
+	SDL_RenderCopy(renderer, timeSeconds1Tex, NULL, &timeSeconds1R);
+	SDL_RenderCopy(renderer, timeSeconds2Tex, NULL, &timeSeconds2R);
+	SDL_RenderCopy(renderer, timePointTex, NULL, &timePointR);
+	
 	SDL_RenderPresent(renderer);
 }
 

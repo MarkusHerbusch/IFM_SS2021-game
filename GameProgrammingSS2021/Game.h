@@ -36,6 +36,10 @@ private:
 	int arrayFuellmenge = 0;
 	int counterPoints = 0;
 	int score = 0;
+	int minuten = 2;
+	int sekunden1 = 0;
+	int sekunden2 = 0;
+	bool zeitAbgelaufen = false;
 
 	bool MoveRight = false;
 	bool MoveLeft = false;
