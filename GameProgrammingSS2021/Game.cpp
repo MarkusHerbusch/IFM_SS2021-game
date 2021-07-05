@@ -1,9 +1,14 @@
 #include "Game.h"
 #include "TextureManager.h"
 #include "Map.h"
+#include <SDL_ttf.h>
+#include <string>
 
 SDL_Texture* playerTex;
+SDL_Texture* textureFont;
 SDL_Rect scrR, destR;
+SDL_Rect Message_rect;
+
 
 struct IntPair {
 	int first, second;
@@ -85,6 +90,60 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	map = new Map();
 	destR.x = 200;
 	destR.y = 200;
+
+
+
+
+	if (TTF_Init() == -1)
+	{
+		std::cerr << "Konnte SDL_ttf nicht initialisieren! Fehler: " << TTF_GetError() << std::endl;
+	}
+
+	TTF_Font* font = TTF_OpenFont("assets/arial.ttf", 42);
+	if (!font)
+	{
+		std::cerr << "Konnte Schriftart nicht laden! Fehler: " << TTF_GetError() << std::endl;
+	}
+
+	SDL_Color textColor = { 255, 255, 0 };
+	SDL_Surface* text = TTF_RenderText_Solid(font, "Test!", textColor);
+	textureFont = SDL_CreateTextureFromSurface(renderer, text);
+
+
+	Message_rect.x = 750;
+	Message_rect.y = 20;
+	Message_rect.w = 100;
+	Message_rect.h = 42;
+	//SDL_RenderCopy(renderer, textureFont, NULL, &Message_rect);
+
+	
+
+	/**TTF_Init();
+	TTF_Quit();
+	TTF_Font* font = TTF_OpenFont("images/arial.ttf", 25);
+	TTF_CloseFont(font);
+
+	SDL_Color color = { 255, 255, 255 };
+	SDL_Surface* surface = TTF_RenderText_Solid(font, "Teststring", color);
+
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_DestroyTexture(texture);
+	SDL_FreeSurface(surface);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderPresent(renderer);
+
+	int texW = 0;
+	int texH = 0;
+	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+	SDL_Rect dstrect = { 0, 0, texW, texH };
+
+	SDL_RenderCopy(renderer, texture, NULL, &dstrect);**/
+
+
+
+	
+
+	
 }
 
 void Game::handleEvents()
@@ -210,6 +269,7 @@ void Game::handleEvents()
 
 void Game::update()
 {
+	
 	cnt++;
 	//std::cout << cnt << std::endl;
 
@@ -303,7 +363,7 @@ void Game::update()
 
 
 	}
-
+ 
 }
 
 void Game::render()
@@ -312,6 +372,7 @@ void Game::render()
 	map->DrawMap();
 	//this is where we would add stuff to render
 	SDL_RenderCopy(renderer, playerTex, NULL, &destR);
+	SDL_RenderCopy(renderer, textureFont, NULL, &Message_rect);
 
 	SDL_RenderPresent(renderer);
 }
