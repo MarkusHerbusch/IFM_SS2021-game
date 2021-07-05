@@ -3,11 +3,16 @@
 #include "Map.h"
 #include <SDL_ttf.h>
 #include <string>
+#include <iostream>
 
 SDL_Texture* playerTex;
-SDL_Texture* textureFont;
+SDL_Texture* textScoreTex;
+SDL_Texture* scoreTex;
 SDL_Rect scrR, destR;
-SDL_Rect Message_rect;
+SDL_Rect textScoreR;
+SDL_Rect scoreR;
+TTF_Font* font42;
+SDL_Color yellow = { 255, 255, 0 };
 
 
 struct IntPair {
@@ -93,30 +98,44 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 
 
 
-
 	if (TTF_Init() == -1)
 	{
 		std::cerr << "Konnte SDL_ttf nicht initialisieren! Fehler: " << TTF_GetError() << std::endl;
 	}
 
-	TTF_Font* font = TTF_OpenFont("assets/arial.ttf", 42);
-	if (!font)
+	font42 = TTF_OpenFont("assets/arial.ttf", 42);
+	if (!font42)
 	{
 		std::cerr << "Konnte Schriftart nicht laden! Fehler: " << TTF_GetError() << std::endl;
 	}
 
-	SDL_Color textColor = { 255, 255, 0 };
-	SDL_Surface* text = TTF_RenderText_Solid(font, "Test!", textColor);
-	textureFont = SDL_CreateTextureFromSurface(renderer, text);
+
+	SDL_Surface* textScoreS = TTF_RenderText_Solid(font42, "Score:", yellow);
+	textScoreTex = SDL_CreateTextureFromSurface(renderer, textScoreS);
+	SDL_FreeSurface(textScoreS);
+
+	int wTextScore = 0;
+	int hTextScore = 0;
+	TTF_SizeText(font42, "Score:", &wTextScore, &hTextScore);
+	std::cout << "Width : " << wTextScore << "\nHeight: " << hTextScore << std::endl;
+	textScoreR.x = 1350;
+	textScoreR.y = 10;
+	textScoreR.w = wTextScore;
+	textScoreR.h = hTextScore;
 
 
-	Message_rect.x = 750;
-	Message_rect.y = 20;
-	Message_rect.w = 100;
-	Message_rect.h = 42;
-	//SDL_RenderCopy(renderer, textureFont, NULL, &Message_rect);
+	SDL_Surface* scoreS = TTF_RenderText_Solid(font42, "0", yellow);
+	scoreTex = SDL_CreateTextureFromSurface(renderer, scoreS);
+	SDL_FreeSurface(scoreS);
 
-	
+	int wScore = 0;
+	int hScore = 0;
+	TTF_SizeText(font42, "0", &wScore, &hScore);
+	std::cout << "Width : " << wScore << "\nHeight: " << hScore << std::endl;
+	scoreR.x = 1480;
+	scoreR.y = 10;
+	scoreR.w = wScore;
+	scoreR.h = hScore;
 
 	/**TTF_Init();
 	TTF_Quit();
@@ -139,9 +158,6 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 
 	SDL_RenderCopy(renderer, texture, NULL, &dstrect);**/
 
-
-
-	
 
 	
 }
@@ -347,6 +363,19 @@ void Game::update()
 			{
 				cout << "Punkt erreicht";
 				map->ChangeMapRemovePoint(points[i][1], points[i][0]);
+
+				//Anzeige des Scores erhöhen
+				score++;
+				std::string tmp = std::to_string(score);
+				char const* score_char = tmp.c_str();
+				SDL_Surface* scoreS = TTF_RenderText_Solid(font42, score_char, yellow);
+				scoreTex = SDL_CreateTextureFromSurface(renderer, scoreS);
+				SDL_FreeSurface(scoreS);
+				int wScore = 0;
+				int hScore = 0;
+				TTF_SizeText(font42, score_char, &wScore, &hScore);
+				scoreR.w = wScore;
+				scoreR.h = hScore;
 				
 				//array umschreiben
 				for (int j = i; j < arrayFuellmenge-1; j++) {
@@ -372,7 +401,8 @@ void Game::render()
 	map->DrawMap();
 	//this is where we would add stuff to render
 	SDL_RenderCopy(renderer, playerTex, NULL, &destR);
-	SDL_RenderCopy(renderer, textureFont, NULL, &Message_rect);
+	SDL_RenderCopy(renderer, textScoreTex, NULL, &textScoreR);
+	SDL_RenderCopy(renderer, scoreTex, NULL, &scoreR);
 
 	SDL_RenderPresent(renderer);
 }
