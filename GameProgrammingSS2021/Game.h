@@ -12,7 +12,7 @@ using namespace std;
 class Game {
 
 public:
-	Game();
+	Game(int gamelevel);
 	~Game();
 
 	void init(const char* title, int farbeSpieler, int xpos, int ypos, int width, int height, bool fullscreen);
@@ -46,7 +46,10 @@ private:
 	bool MoveUp = false;
 	bool MoveDown = false;
 
+	bool geschwindigkeitPress = false;
 	int geschwindigkeit = 2;
+
+	int level = 1;
 
 	bool isRunning;
 	SDL_Window* window;

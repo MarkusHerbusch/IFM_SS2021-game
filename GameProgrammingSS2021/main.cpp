@@ -9,6 +9,8 @@ struct ReturnCharacter {
 	bool run;
 };
 
+int gamelevel = 1;
+
 
 int main(int argc, const char* argv[])
 {
@@ -39,9 +41,9 @@ int main(int argc, const char* argv[])
 	farbeSpieler = ret.chara;
 	stopAll = ret.run;
 
-	if (stopAll == false) {
+	while (stopAll == false && gamelevel <= 2) {
 
-		game = new Game();
+		game = new Game(gamelevel);
 		game->init("Spiel", farbeSpieler, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 800, false);
 
 		while (game->running()) {
@@ -61,6 +63,9 @@ int main(int argc, const char* argv[])
 		}
 
 		game->clean();
+
+		gamelevel++;
+
 	}
 	return 0;
 }

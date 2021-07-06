@@ -5,15 +5,15 @@ class Map
 {
 public:
 
-	Map();
+	Map(int level);
 	~Map();
 
 
 
 	void LoadMap(int arr[25][50]);
 	void DrawMap();
-	struct IntPair ChangeMapAddPoint();
-	void ChangeMapRemovePoint(int, int);
+	struct IntPair ChangeMapAddPoint(int level);
+	void ChangeMapRemovePoint(int, int, int);
 
 private:
 	

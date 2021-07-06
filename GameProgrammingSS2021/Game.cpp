@@ -29,8 +29,10 @@ struct IntPair {
 Map* map;
 SDL_Renderer* Game::renderer = nullptr;
 
-Game::Game()
-{}
+Game::Game(int gamelevel)
+{
+	level = gamelevel;
+}
 Game::~Game()
 {}
 
@@ -99,7 +101,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	playerTex = SDL_CreateTextureFromSurface(renderer, tmpSurface);
 	SDL_FreeSurface(tmpSurface);
 
-	map = new Map();
+	map = new Map(level);
 	destR.x = 200;
 	destR.y = 200;
 
@@ -245,30 +247,6 @@ void Game::handleEvents()
 				MoveDown = true;
 				break;
 
-			case SDLK_1:
-				geschwindigkeit = 1;
-				break;
-
-			case SDLK_2:
-				geschwindigkeit = 2;
-				break;
-
-			case SDLK_3:
-				geschwindigkeit = 3;
-				break;
-
-			case SDLK_4:
-				geschwindigkeit = 4;
-				break;
-
-			case SDLK_5:
-				geschwindigkeit = 5;
-				break;
-
-			case SDLK_6:
-				geschwindigkeit = 6;
-				break;
-
 			default:
 				break;
 			}
@@ -310,6 +288,10 @@ void Game::handleEvents()
 				MoveDown = false;
 				break;
 
+			case SDLK_1:
+				geschwindigkeitPress = true;
+				break;
+
 			default:
 				break;
 			}
@@ -326,6 +308,18 @@ void Game::update()
 	cnt++;
 	//std::cout << cnt << std::endl;
 
+
+	if (score == 15) {
+		isRunning = false;
+	}
+
+	if (geschwindigkeitPress == true && geschwindigkeit < 6) {
+		geschwindigkeit++;
+		geschwindigkeitPress = false;
+	}
+
+
+	//Timer aktualisieren
 	if (cnt % 60 == 0)
 	{
 
@@ -410,7 +404,7 @@ void Game::update()
 
 		struct IntPair ret;
 
-		ret = map->ChangeMapAddPoint();
+		ret = map->ChangeMapAddPoint(level);
 
 		zahlX = ret.second;
 		zahlY = ret.first;
@@ -473,7 +467,7 @@ void Game::update()
 			if (x >= pointX - 75 && x <= pointX && y >= pointY - 75 && y <= pointY)
 			{
 				cout << "Punkt erreicht";
-				map->ChangeMapRemovePoint(points[i][1], points[i][0]);
+				map->ChangeMapRemovePoint(points[i][1], points[i][0], level);
 
 				//Anzeige des Scores erhöhen
 				score++;
