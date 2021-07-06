@@ -1,6 +1,14 @@
+#include "CharacterChoice.h"
 #include "Game.h"
 
+CharacterChoice* characterChoice = nullptr;
 Game* game = nullptr;
+
+struct ReturnCharacter {
+	int chara;
+	bool run;
+};
+
 
 int main(int argc, const char* argv[])
 {
@@ -10,41 +18,49 @@ int main(int argc, const char* argv[])
 
 	Uint32 frameStart;
 	int frameTime;
-
-	game = new Game();
-
 	int farbeSpieler;
-	cout << "Welche Farbe soll dein Character haben?" << endl;
-	cout << "1 - Blau" << endl;
-	cout << "2 - Gelb" << endl;
-	cout << "3 - Gruen" << endl;
-	cout << "4 - Hellblau" << endl;
-	cout << "5 - Pink" << endl;
-	cout << "6 - Violett" << endl;
-	cout << "7 - Weiss" << endl;
+	bool stopAll;
 
-	cin >> farbeSpieler;
+	
+
+	struct ReturnCharacter ret;
 
 
-	game->init("Spiel", farbeSpieler, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 800, false);
+	characterChoice = new CharacterChoice();
+	characterChoice->init("Auswahl des Charakters", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 800, false);
+	while (characterChoice->running()) {
 
-	while (game->running()) {
-
-		frameStart = SDL_GetTicks();
-
-		game->handleEvents();
-		game->update();
-		game->render();
-
-		frameTime = SDL_GetTicks() - frameStart;
-
-		if (frameDelay > frameTime)
-		{
-			SDL_Delay(frameDelay - frameTime);
-		}
+		characterChoice->handleEvents();
+		characterChoice->render();
 	}
 
-	game->clean();
+	ret = characterChoice->clean();
 
+	farbeSpieler = ret.chara;
+	stopAll = ret.run;
+
+	if (stopAll == false) {
+
+		game = new Game();
+		game->init("Spiel", farbeSpieler, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 800, false);
+
+		while (game->running()) {
+
+			frameStart = SDL_GetTicks();
+
+			game->handleEvents();
+			game->update();
+			game->render();
+
+			frameTime = SDL_GetTicks() - frameStart;
+
+			if (frameDelay > frameTime)
+			{
+				SDL_Delay(frameDelay - frameTime);
+			}
+		}
+
+		game->clean();
+	}
 	return 0;
 }

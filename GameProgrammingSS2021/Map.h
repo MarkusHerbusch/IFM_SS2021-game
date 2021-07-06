@@ -12,7 +12,7 @@ public:
 
 	void LoadMap(int arr[25][50]);
 	void DrawMap();
-	struct IntPair  ChangeMapAddPoint();
+	struct IntPair ChangeMapAddPoint();
 	void ChangeMapRemovePoint(int, int);
 
 private:

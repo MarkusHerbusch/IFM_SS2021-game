@@ -69,7 +69,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 
 	if (farbeSpieler == 1) 
 	{
-		tmpSurface = IMG_Load("images/SpielerBlau.png");	
+		tmpSurface = IMG_Load("images/SpielerBlau.png");
 	}
 	else if (farbeSpieler == 2)
 	{
@@ -196,29 +196,6 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	timePointR.y = 8;
 	timePointR.w = wTimePoint;
 	timePointR.h = hTimePoint;
-
-	/**TTF_Init();
-	TTF_Quit();
-	TTF_Font* font = TTF_OpenFont("images/arial.ttf", 25);
-	TTF_CloseFont(font);
-
-	SDL_Color color = { 255, 255, 255 };
-	SDL_Surface* surface = TTF_RenderText_Solid(font, "Teststring", color);
-
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-	SDL_DestroyTexture(texture);
-	SDL_FreeSurface(surface);
-	SDL_RenderCopy(renderer, texture, NULL, NULL);
-	SDL_RenderPresent(renderer);
-
-	int texW = 0;
-	int texH = 0;
-	SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-	SDL_Rect dstrect = { 0, 0, texW, texH };
-
-	SDL_RenderCopy(renderer, texture, NULL, &dstrect);**/
-
-
 	
 }
 
@@ -430,8 +407,6 @@ void Game::update()
 	{
 		int zahlX;
 		int zahlY;
-
-		
 
 		struct IntPair ret;
 
