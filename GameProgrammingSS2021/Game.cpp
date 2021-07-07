@@ -23,6 +23,12 @@ SDL_Texture* textTempo3Tex;
 SDL_Texture* textTempo4Tex;
 SDL_Texture* textTempo5Tex;
 SDL_Texture* numberTempoTex;
+SDL_Texture* textTimePlusTex;
+SDL_Texture* textTimePlus2Tex;
+SDL_Texture* textTimePlus3Tex;
+SDL_Texture* textTimePlus4Tex;
+SDL_Texture* textTimePlus5Tex;
+SDL_Texture* numberTimePlusTex;
 SDL_Rect scrR, destR;
 SDL_Rect textScoreR;
 SDL_Rect scoreR;
@@ -30,6 +36,7 @@ SDL_Rect textLevelR, levelNumberR;
 SDL_Rect timeMinutesR, timeSeconds1R, timeSeconds2R, timePointR;
 SDL_Rect textBonusR, bonuslNumberR; 
 SDL_Rect textTempoR, textTempo2R, textTempo3R, textTempo4R, textTempo5R, numberTempoR;
+SDL_Rect textTimePlusR, textTimePlus2R, textTimePlus3R, textTimePlus4R, textTimePlus5R, numberTimePlusR;
 TTF_Font* font42;
 TTF_Font* font28;
 TTF_Font* font26;
@@ -447,6 +454,86 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	numberTempoR.w = wNumberTempo;
 	numberTempoR.h = hNumberTempo;
 
+	//Anzeige Text Zeit erhöhen
+	SDL_Surface* textTimePlusS = TTF_RenderText_Solid(font26, "Zeit erhöhen", black);
+	textTimePlusTex = SDL_CreateTextureFromSurface(renderer, textTimePlusS);
+	SDL_FreeSurface(textTimePlusS);
+
+	int wTextTimePlus = 0;
+	int hTextTimePlus = 0;
+	TTF_SizeText(font26, "Zeit erhöhen", &wTextTimePlus, &hTextTimePlus);
+	textTimePlusR.x = ((6 * 32) - wTextTimePlus) / 2;
+	textTimePlusR.y = 370;
+	textTimePlusR.w = wTextTimePlus;
+	textTimePlusR.h = hTextTimePlus;
+
+	//Anzeige Text Zeit erhöhen 2
+	SDL_Surface* textTimePlus2S = TTF_RenderText_Solid(font26, "(+ 1 Minute)", black);
+	textTimePlus2Tex = SDL_CreateTextureFromSurface(renderer, textTimePlus2S);
+	SDL_FreeSurface(textTimePlus2S);
+
+	int wTextTimePlus2 = 0;
+	int hTextTimePlus2 = 0;
+	TTF_SizeText(font26, "(+ 1 Minute)", &wTextTimePlus2, &hTextTimePlus2);
+	textTimePlus2R.x = ((6 * 32) - wTextTimePlus2) / 2;
+	textTimePlus2R.y = 400;
+	textTimePlus2R.w = wTextTimePlus2;
+	textTimePlus2R.h = hTextTimePlus2;
+
+	//Anzeige Text Zeit erhöhen 3
+	SDL_Surface* textTimePlus3S = TTF_RenderText_Solid(font28, "Kosten: 5", red);
+	textTimePlus3Tex = SDL_CreateTextureFromSurface(renderer, textTimePlus3S);
+	SDL_FreeSurface(textTimePlus3S);
+
+	int wTextTimePlus3 = 0;
+	int hTextTimePlus3 = 0;
+	TTF_SizeText(font28, "Kosten: 5", &wTextTimePlus3, &hTextTimePlus3);
+	textTimePlus3R.x = ((6 * 32) - wTextTimePlus3) / 2;
+	textTimePlus3R.y = 440;
+	textTimePlus3R.w = wTextTimePlus3;
+	textTimePlus3R.h = hTextTimePlus3;
+
+	//Anzeige Text Zeit erhöhen 4
+	SDL_Surface* textTimePlus4S = TTF_RenderText_Solid(font26, "Drücke Taste 2", red);
+	textTimePlus4Tex = SDL_CreateTextureFromSurface(renderer, textTimePlus4S);
+	SDL_FreeSurface(textTimePlus4S);
+
+	int wTextTimePlus4 = 0;
+	int hTextTimePlus4 = 0;
+	TTF_SizeText(font26, "Drücke Taste 2", &wTextTimePlus4, &hTextTimePlus4);
+	textTimePlus4R.x = ((6 * 32) - wTextTimePlus4) / 2;
+	textTimePlus4R.y = 470;
+	textTimePlus4R.w = wTextTimePlus4;
+	textTimePlus4R.h = hTextTimePlus4;
+
+	//Anzeige Text Zeit erhöhen 5
+	SDL_Surface* textTimePlus5S = TTF_RenderText_Solid(font28, "  / 2 x", green);
+	textTimePlus5Tex = SDL_CreateTextureFromSurface(renderer, textTimePlus5S);
+	SDL_FreeSurface(textTimePlus5S);
+
+	int wTextTimePlus5 = 0;
+	int hTextTimePlus5 = 0;
+	TTF_SizeText(font28, "  / 2 x", &wTextTimePlus5, &hTextTimePlus5);
+	textTimePlus5R.x = ((6 * 32) - wTextTimePlus5) / 2;
+	textTimePlus5R.y = 500;
+	textTimePlus5R.w = wTextTimePlus5;
+	textTimePlus5R.h = hTextTimePlus5;
+
+	//Anzeige Text Zeit erhöhen Nummer
+	std::string tmpTimePlusNumber = std::to_string(timeUpdate);
+	char const* timePlus_char = tmpTimePlusNumber.c_str();
+	SDL_Surface* numberTimePlusS = TTF_RenderText_Solid(font28, timePlus_char, green);
+	numberTimePlusTex = SDL_CreateTextureFromSurface(renderer, numberTimePlusS);
+	SDL_FreeSurface(numberTimePlusS);
+
+	int wNumberTimePlus = 0;
+	int hNumberTimePlus = 0;
+	TTF_SizeText(font28, timePlus_char, &wNumberTimePlus, &hNumberTimePlus);
+	numberTimePlusR.x = 55;
+	numberTimePlusR.y = 500;
+	numberTimePlusR.w = wNumberTimePlus;
+	numberTimePlusR.h = hNumberTimePlus;
+
 }
 
 void Game::handleEvents()
@@ -579,10 +666,13 @@ void Game::handleEvents()
 				break;
 
 			case SDLK_2:
-				minuten++;
-				colorTime = { 0, 255, 0 };
+				if (countBonusPoints >= 5 && timeUpdate < 2) {
+					minuten++;
+					colorTime = { 0, 255, 0 };
+					countBonusPoints -= 5;
+					timeUpdate++;
 
-				if (true) {
+					//Anzeige Minuten
 					std::string tmp10 = std::to_string(minuten);
 					char const* minutes_char = tmp10.c_str();
 					SDL_Surface* timeMinutesS = TTF_RenderText_Solid(font42, minutes_char, colorTime);
@@ -593,6 +683,36 @@ void Game::handleEvents()
 					TTF_SizeText(font42, minutes_char, &wMinutes, &hMinutes);
 					timeMinutesR.w = wMinutes;
 					timeMinutesR.h = hMinutes;
+
+					//Anzeige Bonuspunkte
+					std::string tmpBonusNumber = std::to_string(countBonusPoints);
+					char const* bonus_char = tmpBonusNumber.c_str();
+					SDL_Surface* bonusNumberS = TTF_RenderText_Solid(font42, bonus_char, green);
+					bonusNumberTex = SDL_CreateTextureFromSurface(renderer, bonusNumberS);
+					SDL_FreeSurface(bonusNumberS);
+
+					int wBonusNumber = 0;
+					int hBonusNumber = 0;
+					TTF_SizeText(font42, bonus_char, &wBonusNumber, &hBonusNumber);
+					bonuslNumberR.x = ((6 * 32) - wBonusNumber) / 2;
+					bonuslNumberR.y = 100;
+					bonuslNumberR.w = wBonusNumber;
+					bonuslNumberR.h = hBonusNumber;
+
+					//Anzeige Text Zeit erhöhen Nummer
+					std::string tmpTimePlusNumber = std::to_string(timeUpdate);
+					char const* timePlus_char = tmpTimePlusNumber.c_str();
+					SDL_Surface* numberTimePlusS = TTF_RenderText_Solid(font28, timePlus_char, green);
+					numberTimePlusTex = SDL_CreateTextureFromSurface(renderer, numberTimePlusS);
+					SDL_FreeSurface(numberTimePlusS);
+
+					int wNumberTimePlus = 0;
+					int hNumberTimePlus = 0;
+					TTF_SizeText(font28, timePlus_char, &wNumberTimePlus, &hNumberTimePlus);
+					numberTimePlusR.x = 55;
+					numberTimePlusR.y = 500;
+					numberTimePlusR.w = wNumberTimePlus;
+					numberTimePlusR.h = hNumberTimePlus;
 				}
 				
 				break;
@@ -921,6 +1041,12 @@ void Game::render()
 	SDL_RenderCopy(renderer, textTempo4Tex, NULL, &textTempo4R);
 	SDL_RenderCopy(renderer, textTempo5Tex, NULL, &textTempo5R);
 	SDL_RenderCopy(renderer, numberTempoTex, NULL, &numberTempoR);
+	SDL_RenderCopy(renderer, textTimePlusTex, NULL, &textTimePlusR);
+	SDL_RenderCopy(renderer, textTimePlus2Tex, NULL, &textTimePlus2R);
+	SDL_RenderCopy(renderer, textTimePlus3Tex, NULL, &textTimePlus3R);
+	SDL_RenderCopy(renderer, textTimePlus4Tex, NULL, &textTimePlus4R);
+	SDL_RenderCopy(renderer, textTimePlus5Tex, NULL, &textTimePlus5R);
+	SDL_RenderCopy(renderer, numberTimePlusTex, NULL, &numberTimePlusR);
 	
 	SDL_RenderPresent(renderer);
 }

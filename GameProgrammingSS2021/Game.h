@@ -55,6 +55,7 @@ private:
 
 	int geschwindigkeitLevel = 1;
 	int geschwindigkeit = 2;
+	int timeUpdate = 0;
 
 	int level = 1;
 	int counterWall = 0;
