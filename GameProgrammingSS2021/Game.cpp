@@ -34,6 +34,11 @@ struct ReturnGame {
 	bool run;
 };
 
+struct WallReturn {
+	int x;
+	int y;
+};
+
 Map* map;
 SDL_Renderer* Game::renderer = nullptr;
 
@@ -79,6 +84,7 @@ Game::Game(int gamelevel, int gameScore)
 	default:
 		break;
 	}
+
 }
 Game::~Game()
 {}
@@ -152,6 +158,27 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	destR.x = 200;
 	destR.y = 200;
 
+
+	//Anzahl der Hindernisse im Level ermitteln
+	counterWall = map->CountWall(level);
+	std::cerr << "AnzahlWall: " << counterWall << std::endl;
+
+	//Hindernisse feststellen und ins Array schreiben
+	for (int i = 0; i < counterWall; i++)
+	{
+		int x = 0;
+		int y = 0;
+		struct WallReturn returnWall;
+		returnWall = map->ReturnWallPosition(i, level);
+		x = returnWall.x;
+		y = returnWall.y;
+
+		std::cout << "WallX Nr. " << i << ": " << x << std::endl;
+		std::cout << "WallY Nr. " << i << ": " << y << std::endl;
+
+		wallArray[i][0] = x;
+		wallArray[i][1] = y;
+	}
 
 
 	if (TTF_Init() == -1)
@@ -443,34 +470,34 @@ void Game::update()
 		SDL_FreeSurface(timeMinutesS);
 		int wMinutes = 0;
 		int hMinutes = 0;
-		TTF_SizeText(font42, minutes_char, &wMinutes, &hMinutes);
-		timeMinutesR.w = wMinutes;
-		timeMinutesR.h = hMinutes;
+TTF_SizeText(font42, minutes_char, &wMinutes, &hMinutes);
+timeMinutesR.w = wMinutes;
+timeMinutesR.h = hMinutes;
 
-		//Anzeige Sekunden1
-		std::string tmp2 = std::to_string(sekunden1);
-		char const* seconds1_char = tmp2.c_str();
-		SDL_Surface* timeSeconds1S = TTF_RenderText_Solid(font42, seconds1_char, colorTime);
-		timeSeconds1Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds1S);
-		SDL_FreeSurface(timeSeconds1S);
-		int wSeconds1 = 0;
-		int hSeconds1 = 0;
-		TTF_SizeText(font42, seconds1_char, &wSeconds1, &hSeconds1);
-		timeSeconds1R.w = wSeconds1;
-		timeSeconds1R.h = hSeconds1;
+//Anzeige Sekunden1
+std::string tmp2 = std::to_string(sekunden1);
+char const* seconds1_char = tmp2.c_str();
+SDL_Surface* timeSeconds1S = TTF_RenderText_Solid(font42, seconds1_char, colorTime);
+timeSeconds1Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds1S);
+SDL_FreeSurface(timeSeconds1S);
+int wSeconds1 = 0;
+int hSeconds1 = 0;
+TTF_SizeText(font42, seconds1_char, &wSeconds1, &hSeconds1);
+timeSeconds1R.w = wSeconds1;
+timeSeconds1R.h = hSeconds1;
 
-		//Anzeige Sekunden2
-		std::string tmp3 = std::to_string(sekunden2);
-		char const* seconds2_char = tmp3.c_str();
-		SDL_Surface* timeSeconds2S = TTF_RenderText_Solid(font42, seconds2_char, colorTime);
-		timeSeconds2Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds2S);
-		SDL_FreeSurface(timeSeconds2S);
-		int wSeconds2 = 0;
-		int hSeconds2 = 0;
-		TTF_SizeText(font42, seconds2_char, &wSeconds2, &hSeconds2);
-		timeSeconds2R.w = wSeconds2;
-		timeSeconds2R.h = hSeconds2;
-		
+//Anzeige Sekunden2
+std::string tmp3 = std::to_string(sekunden2);
+char const* seconds2_char = tmp3.c_str();
+SDL_Surface* timeSeconds2S = TTF_RenderText_Solid(font42, seconds2_char, colorTime);
+timeSeconds2Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds2S);
+SDL_FreeSurface(timeSeconds2S);
+int wSeconds2 = 0;
+int hSeconds2 = 0;
+TTF_SizeText(font42, seconds2_char, &wSeconds2, &hSeconds2);
+timeSeconds2R.w = wSeconds2;
+timeSeconds2R.h = hSeconds2;
+
 	}
 
 
@@ -494,12 +521,12 @@ void Game::update()
 		arrayFuellmenge++;
 		counterPoints++;
 	}
-	
-	
+
+
 	//Höhe und Breite des Charakters
 	destR.h = 75;
 	destR.w = 75;
-	
+
 
 	//Spielfeldgröße: 1600*800 
 
@@ -532,6 +559,46 @@ void Game::update()
 		}
 		destR.y = y;
 	}
+
+	int xWall = 0;
+	int yWall = 0;
+	for (int i = 0; i < counterWall; i++)
+	{
+		xWall = wallArray[i][0];
+		yWall = wallArray[i][1];
+
+		std::cout << i << "xWall: " << xWall << ", yWall:  " << yWall << std::endl;
+
+		//Berührung von links
+		if (MoveRight && x > ((xWall * 32) - 75) && x < ((xWall * 32) + 10 - 75) && y > ((yWall * 32) - 75) && y < ((yWall * 32) + 32))
+		{
+			x = (xWall * 32) - 75;
+			destR.x = x;
+		}
+
+		//Berührung von rechts
+		if (MoveLeft && x < ((xWall * 32) + 32) && x > ((xWall * 32) + 32 - 10) && y > ((yWall * 32) - 75) && y < ((yWall * 32) + 32))
+		{
+			x = (xWall * 32) + 32;
+			destR.x = x;
+		}
+
+		//Berührung von oben
+		if (MoveDown && y > ((yWall * 32) - 75) && y < ((yWall * 32) + 10 - 75) && x > ((xWall * 32) - 75) && x < ((xWall * 32) + 32))
+		{
+			y = (yWall * 32) - 75;
+			destR.y = y;
+		}
+
+		//Berührung von unten
+		if (MoveUp && y < ((yWall * 32) + 32) && y > ((yWall * 32) + 32 - 10) && x > ((xWall * 32) - 75) && x < ((xWall * 32) + 32))
+		{
+			y = (yWall * 32) + 32;
+			destR.y = y;
+		}
+
+	}
+
 
 	//Punkt wieder von der Karte entfernen
 	if (arrayFuellmenge > 0)

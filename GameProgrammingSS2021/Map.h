@@ -14,6 +14,8 @@ public:
 	void DrawMap();
 	struct IntPair ChangeMapAddPoint(int level);
 	void ChangeMapRemovePoint(int, int, int);
+	int CountWall(int level);
+	struct WallReturn ReturnWallPosition(int counterWall, int level);
 
 private:
 	

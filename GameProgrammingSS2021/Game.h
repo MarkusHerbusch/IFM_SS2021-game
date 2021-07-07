@@ -52,6 +52,8 @@ private:
 	int geschwindigkeit = 2;
 
 	int level = 1;
+	int counterWall = 0;
+	int wallArray[999][2];
 
 	bool stopAll = false;
 	bool isRunning;
