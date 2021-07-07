@@ -12,9 +12,12 @@ SDL_Texture* timeMinutesTex;
 SDL_Texture* timeSeconds1Tex;
 SDL_Texture* timeSeconds2Tex;
 SDL_Texture* timePointTex;
+SDL_Texture* textLevelTex;
+SDL_Texture* levelNumberTex;
 SDL_Rect scrR, destR;
 SDL_Rect textScoreR;
 SDL_Rect scoreR;
+SDL_Rect textLevelR, levelNumberR;
 SDL_Rect timeMinutesR, timeSeconds1R, timeSeconds2R, timePointR;
 TTF_Font* font42;
 SDL_Color yellow = { 255, 255, 0 };
@@ -26,12 +29,56 @@ struct IntPair {
 	int first, second;
 };
 
+struct ReturnGame {
+	int score;
+	bool run;
+};
+
 Map* map;
 SDL_Renderer* Game::renderer = nullptr;
 
-Game::Game(int gamelevel)
+Game::Game(int gamelevel, int gameScore)
 {
 	level = gamelevel;
+	score = gameScore;
+
+	switch (level)
+	{
+
+	case 1:
+		levelMaxPoints = 15;
+		break;
+	case 2:
+		levelMaxPoints = 20;
+		break;
+	case 3:
+		levelMaxPoints = 30;
+		break;
+	case 4:
+		levelMaxPoints = 40;
+		break;
+	case 5:
+		levelMaxPoints = 50;
+		break;
+	case 6:
+		levelMaxPoints = 60;
+		break;
+	case 7:
+		levelMaxPoints = 70;
+		break;
+	case 8:
+		levelMaxPoints = 80;
+		break;
+	case 9:
+		levelMaxPoints = 90;
+		break;
+	case 10:
+		levelMaxPoints = 100;
+		break;
+
+	default:
+		break;
+	}
 }
 Game::~Game()
 {}
@@ -133,13 +180,15 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	textScoreR.h = hTextScore;
 
 	//Anzeige Score
-	SDL_Surface* scoreS = TTF_RenderText_Solid(font42, "0", yellow);
+	std::string tmpScore = std::to_string(score);
+	char const* score_char = tmpScore.c_str();
+	SDL_Surface* scoreS = TTF_RenderText_Solid(font42, score_char, yellow);
 	scoreTex = SDL_CreateTextureFromSurface(renderer, scoreS);
 	SDL_FreeSurface(scoreS);
 
 	int wScore = 0;
 	int hScore = 0;
-	TTF_SizeText(font42, "0", &wScore, &hScore);
+	TTF_SizeText(font42, score_char, &wScore, &hScore);
 	std::cout << "Width : " << wScore << "\nHeight: " << hScore << std::endl;
 	scoreR.x = 1480;
 	scoreR.y = 10;
@@ -198,6 +247,34 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	timePointR.y = 8;
 	timePointR.w = wTimePoint;
 	timePointR.h = hTimePoint;
+
+	//Anzeige Text Level
+	SDL_Surface* textLevelS = TTF_RenderText_Solid(font42, "Level:", yellow);
+	textLevelTex = SDL_CreateTextureFromSurface(renderer, textLevelS);
+	SDL_FreeSurface(textLevelS);
+
+	int wTextLevel = 0;
+	int hTextLevel = 0;
+	TTF_SizeText(font42, "Level:", &wTextLevel, &hTextLevel);
+	textLevelR.x = 200;
+	textLevelR.y = 10;
+	textLevelR.w = wTextLevel;
+	textLevelR.h = hTextLevel;
+
+	//Anzeige LevelNumber
+	std::string tmpLevelNumber = std::to_string(level);
+	char const* level_char = tmpLevelNumber.c_str();
+	SDL_Surface* levelNumberS = TTF_RenderText_Solid(font42, level_char, yellow);
+	levelNumberTex = SDL_CreateTextureFromSurface(renderer, levelNumberS);
+	SDL_FreeSurface(levelNumberS);
+
+	int wLevelNumber = 0;
+	int hLevelNumber = 0;
+	TTF_SizeText(font42, level_char, &wLevelNumber, &hLevelNumber);
+	levelNumberR.x = 320;
+	levelNumberR.y = 10;
+	levelNumberR.w = wLevelNumber;
+	levelNumberR.h = hLevelNumber;
 	
 }
 
@@ -209,6 +286,7 @@ void Game::handleEvents()
 	{
 		case SDL_QUIT:
 			isRunning = false;
+			stopAll = true;
 			break;
 
 
@@ -309,7 +387,7 @@ void Game::update()
 	//std::cout << cnt << std::endl;
 
 
-	if (score == 15) {
+	if (scoreLevel == levelMaxPoints) {
 		isRunning = false;
 	}
 
@@ -319,7 +397,7 @@ void Game::update()
 	}
 
 
-	//Timer aktualisieren
+	//Timer aktualisieren, alle 60 Frames
 	if (cnt % 60 == 0)
 	{
 
@@ -357,7 +435,7 @@ void Game::update()
 			}
 		}
 		
-		//Minuten
+		//Anzeige Minuten
 		std::string tmp1 = std::to_string(minuten);
 		char const* minutes_char = tmp1.c_str();
 		SDL_Surface* timeMinutesS = TTF_RenderText_Solid(font42, minutes_char, colorTime);
@@ -397,7 +475,7 @@ void Game::update()
 
 
 	//Punkt auf Karte erzeugen
-	if (cnt % 120 == 0 && arrayFuellmenge < 10 && counterPoints < 15)
+	if (cnt % 60 == 0 && arrayFuellmenge < 10 && counterPoints < levelMaxPoints)
 	{
 		int zahlX;
 		int zahlY;
@@ -425,7 +503,7 @@ void Game::update()
 
 	//Spielfeldgröße: 1600*800 
 
-	
+	//Charakter kann die Spielfeldbegrenzung nicht verlassen
 	if (MoveRight && x < 1493) {
 		x = x + geschwindigkeit;
 		if (x > 1493) {
@@ -471,6 +549,7 @@ void Game::update()
 
 				//Anzeige des Scores erhöhen
 				score++;
+				scoreLevel++;
 				std::string tmp = std::to_string(score);
 				char const* score_char = tmp.c_str();
 				SDL_Surface* scoreS = TTF_RenderText_Solid(font42, score_char, yellow);
@@ -512,14 +591,22 @@ void Game::render()
 	SDL_RenderCopy(renderer, timeSeconds1Tex, NULL, &timeSeconds1R);
 	SDL_RenderCopy(renderer, timeSeconds2Tex, NULL, &timeSeconds2R);
 	SDL_RenderCopy(renderer, timePointTex, NULL, &timePointR);
+	SDL_RenderCopy(renderer, textLevelTex, NULL, &textLevelR);
+	SDL_RenderCopy(renderer, levelNumberTex, NULL, &levelNumberR);
 	
 	SDL_RenderPresent(renderer);
 }
 
-void Game::clean()
+struct ReturnGame Game::clean()
 {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 	std::cout << "Game Cleaned" << std::endl;
+
+	struct ReturnGame ret;
+	ret.score = score;
+	ret.run = stopAll;
+
+	return ret;
 }

@@ -27,6 +27,7 @@ private:
 	SDL_Texture* backgroundBlue;
 	SDL_Texture* backgroundBlueLimitBelow;
 	SDL_Texture* redPoint;
+	SDL_Texture* wall;
 
 	int map[25][50];
 };

@@ -9,7 +9,13 @@ struct ReturnCharacter {
 	bool run;
 };
 
+struct ReturnGame {
+	int score;
+	bool run;
+};
+
 int gamelevel = 1;
+int score = 0;
 
 
 int main(int argc, const char* argv[])
@@ -26,6 +32,7 @@ int main(int argc, const char* argv[])
 	
 
 	struct ReturnCharacter ret;
+	struct ReturnGame retGame;
 
 
 	characterChoice = new CharacterChoice();
@@ -43,7 +50,7 @@ int main(int argc, const char* argv[])
 
 	while (stopAll == false && gamelevel <= 2) {
 
-		game = new Game(gamelevel);
+		game = new Game(gamelevel, score);
 		game->init("Spiel", farbeSpieler, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 800, false);
 
 		while (game->running()) {
@@ -62,8 +69,9 @@ int main(int argc, const char* argv[])
 			}
 		}
 
-		game->clean();
-
+		retGame = game->clean();
+		score = retGame.score;
+		stopAll = retGame.run;
 		gamelevel++;
 
 	}
