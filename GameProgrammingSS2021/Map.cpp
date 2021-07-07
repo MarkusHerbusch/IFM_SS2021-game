@@ -303,6 +303,7 @@ Map::Map(int level)
 	backgroundBlueLimitBelow = TextureManager::LoadTexture("images/backgroundBlueLimitBelow.png");
 	wall = TextureManager::LoadTexture("images/wall.png");
 	redPoint = TextureManager::LoadTexture("images/RedPoint.png");
+	bonusPoint = TextureManager::LoadTexture("images/bonusPoint.png");
 
 	switch (level)
 	{
@@ -399,6 +400,9 @@ void Map::DrawMap()
 			case 8:
 				TextureManager::Draw(redPoint, src, dest);
 				break;
+			case 9:
+				TextureManager::Draw(bonusPoint, src, dest);
+				break;
 			default:
 				break;
 			}
@@ -406,14 +410,19 @@ void Map::DrawMap()
 	}
 }
 
-struct IntPair Map::ChangeMapAddPoint(int level)
+struct IntPair Map::ChangeMapAddPoint(int level, bool red)
 {
 	//Spielfeldbereich: [2][6] bis [23][48]
 	// 22 Möglichkeiten, 43 Möglichkeiten
+	int number = 0;
+	if (red)
+	{
+		number = 8;
+	}
+	else {
+		number = 9;
+	}
 
-
-
-	
 	std::srand(std::time(nullptr));
 
 	int randomNumber1 = (rand() % 22) + 2;
@@ -429,7 +438,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 	{
 	case 1:
 		if (level1[randomNumber1][randomNumber2] == 0) {
-			level1[randomNumber1][randomNumber2] = 8;
+			level1[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level1);
 		}
 		else {
@@ -439,7 +448,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 2:
 		if (level2[randomNumber1][randomNumber2] == 0) {
-			level2[randomNumber1][randomNumber2] = 8;
+			level2[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level2);
 		}
 		else {
@@ -449,7 +458,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 3:
 		if (level3[randomNumber1][randomNumber2] == 0) {
-			level3[randomNumber1][randomNumber2] = 8;
+			level3[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level3);
 		}
 		else {
@@ -459,7 +468,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 4:
 		if (level4[randomNumber1][randomNumber2] == 0) {
-			level4[randomNumber1][randomNumber2] = 8;
+			level4[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level4);
 		}
 		else {
@@ -469,7 +478,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 5:
 		if (level5[randomNumber1][randomNumber2] == 0) {
-			level5[randomNumber1][randomNumber2] = 8;
+			level5[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level5);
 		}
 		else {
@@ -479,7 +488,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 6:
 		if (level6[randomNumber1][randomNumber2] == 0) {
-			level6[randomNumber1][randomNumber2] = 8;
+			level6[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level6);
 		}
 		else {
@@ -489,7 +498,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 7:
 		if (level7[randomNumber1][randomNumber2] == 0) {
-			level7[randomNumber1][randomNumber2] = 8;
+			level7[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level7);
 		}
 		else {
@@ -499,7 +508,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 8:
 		if (level8[randomNumber1][randomNumber2] == 0) {
-			level8[randomNumber1][randomNumber2] = 8;
+			level8[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level8);
 		}
 		else {
@@ -509,7 +518,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 9:
 		if (level9[randomNumber1][randomNumber2] == 0) {
-			level9[randomNumber1][randomNumber2] = 8;
+			level9[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level9);
 		}
 		else {
@@ -519,7 +528,7 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 		break;
 	case 10:
 		if (level10[randomNumber1][randomNumber2] == 0) {
-			level10[randomNumber1][randomNumber2] = 8;
+			level10[randomNumber1][randomNumber2] = number;
 			Map::LoadMap(level10);
 		}
 		else {

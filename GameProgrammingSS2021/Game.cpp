@@ -4,6 +4,7 @@
 #include <SDL_ttf.h>
 #include <string>
 #include <iostream>
+#include <random>
 
 SDL_Texture* playerTex;
 SDL_Texture* textScoreTex;
@@ -92,7 +93,15 @@ Game::Game(int gamelevel, int gameScore, int bonus)
 		break;
 	}
 
+	
+	//Zufallszahl erzeugen (in welchem zeitlichen Abstand erscheinen die Bonuspunkte)
+	std::random_device rd;
+	std::default_random_engine eng(rd());
+	std::uniform_int_distribution<int> distr(900, 2700);
+	zufallszahlBonus = distr(eng);
+	std::cout << "Zufallszahl: " << zufallszahlBonus << std::endl;
 }
+
 Game::~Game()
 {}
 
@@ -510,33 +519,33 @@ void Game::update()
 		SDL_FreeSurface(timeMinutesS);
 		int wMinutes = 0;
 		int hMinutes = 0;
-TTF_SizeText(font42, minutes_char, &wMinutes, &hMinutes);
-timeMinutesR.w = wMinutes;
-timeMinutesR.h = hMinutes;
+		TTF_SizeText(font42, minutes_char, &wMinutes, &hMinutes);
+		timeMinutesR.w = wMinutes;
+		timeMinutesR.h = hMinutes;
 
-//Anzeige Sekunden1
-std::string tmp2 = std::to_string(sekunden1);
-char const* seconds1_char = tmp2.c_str();
-SDL_Surface* timeSeconds1S = TTF_RenderText_Solid(font42, seconds1_char, colorTime);
-timeSeconds1Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds1S);
-SDL_FreeSurface(timeSeconds1S);
-int wSeconds1 = 0;
-int hSeconds1 = 0;
-TTF_SizeText(font42, seconds1_char, &wSeconds1, &hSeconds1);
-timeSeconds1R.w = wSeconds1;
-timeSeconds1R.h = hSeconds1;
+		//Anzeige Sekunden1
+		std::string tmp2 = std::to_string(sekunden1);
+		char const* seconds1_char = tmp2.c_str();
+		SDL_Surface* timeSeconds1S = TTF_RenderText_Solid(font42, seconds1_char, colorTime);
+		timeSeconds1Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds1S);
+		SDL_FreeSurface(timeSeconds1S);
+		int wSeconds1 = 0;
+		int hSeconds1 = 0;
+		TTF_SizeText(font42, seconds1_char, &wSeconds1, &hSeconds1);
+		timeSeconds1R.w = wSeconds1;
+		timeSeconds1R.h = hSeconds1;
 
-//Anzeige Sekunden2
-std::string tmp3 = std::to_string(sekunden2);
-char const* seconds2_char = tmp3.c_str();
-SDL_Surface* timeSeconds2S = TTF_RenderText_Solid(font42, seconds2_char, colorTime);
-timeSeconds2Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds2S);
-SDL_FreeSurface(timeSeconds2S);
-int wSeconds2 = 0;
-int hSeconds2 = 0;
-TTF_SizeText(font42, seconds2_char, &wSeconds2, &hSeconds2);
-timeSeconds2R.w = wSeconds2;
-timeSeconds2R.h = hSeconds2;
+		//Anzeige Sekunden2
+		std::string tmp3 = std::to_string(sekunden2);
+		char const* seconds2_char = tmp3.c_str();
+		SDL_Surface* timeSeconds2S = TTF_RenderText_Solid(font42, seconds2_char, colorTime);
+		timeSeconds2Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds2S);
+		SDL_FreeSurface(timeSeconds2S);
+		int wSeconds2 = 0;
+		int hSeconds2 = 0;
+		TTF_SizeText(font42, seconds2_char, &wSeconds2, &hSeconds2);
+		timeSeconds2R.w = wSeconds2;
+		timeSeconds2R.h = hSeconds2;
 
 	}
 
@@ -551,7 +560,7 @@ timeSeconds2R.h = hSeconds2;
 
 		//verhindern, dass Punkte an bereits besetzten Stellen erscheinen
 		do {
-			ret = map->ChangeMapAddPoint(level);
+			ret = map->ChangeMapAddPoint(level, true);
 
 			zahlX = ret.second;
 			zahlY = ret.first;
@@ -564,6 +573,21 @@ timeSeconds2R.h = hSeconds2;
 		points[arrayFuellmenge][1] = zahlY;
 		arrayFuellmenge++;
 		counterPoints++;
+	}
+
+	//Bonuspunkte auf Karte anzeigen
+	if (cnt % zufallszahlBonus == 0 && bonusOnMap == false) {
+		
+		struct IntPair ret;
+
+		do {
+			ret = map->ChangeMapAddPoint(level, false);
+
+			bonusPointX = ret.second;
+			bonusPointY = ret.first;
+		} while (bonusPointX == 0 && bonusPointY == 0);
+
+		bonusOnMap = true;
 	}
 
 
@@ -682,10 +706,40 @@ timeSeconds2R.h = hSeconds2;
 			}
 
 		}
-		
-		
+
+	}
+
+	if (bonusOnMap)
+	{
+		int pointX = bonusPointX * 32 + 16;
+		int pointY = bonusPointY * 32 + 16;
+
+		if (x >= pointX - 75 && x <= pointX && y >= pointY - 75 && y <= pointY)
+		{
+			cout << "Bonus erreicht";
+			map->ChangeMapRemovePoint(bonusPointY, bonusPointX, level);
+
+			bonusOnMap = false;
+			countBonusPoints++;
 
 
+			//Anzeige Bonuspunkte
+			std::string tmpBonusNumber = std::to_string(countBonusPoints);
+			char const* bonus_char = tmpBonusNumber.c_str();
+			SDL_Surface* bonusNumberS = TTF_RenderText_Solid(font42, bonus_char, green);
+			bonusNumberTex = SDL_CreateTextureFromSurface(renderer, bonusNumberS);
+			SDL_FreeSurface(bonusNumberS);
+
+			int wBonusNumber = 0;
+			int hBonusNumber = 0;
+			TTF_SizeText(font42, bonus_char, &wBonusNumber, &hBonusNumber);
+			bonuslNumberR.x = ((6 * 32) - wBonusNumber) / 2;
+			bonuslNumberR.y = 100;
+			bonuslNumberR.w = wBonusNumber;
+			bonuslNumberR.h = hBonusNumber;
+
+
+		}
 	}
  
 }

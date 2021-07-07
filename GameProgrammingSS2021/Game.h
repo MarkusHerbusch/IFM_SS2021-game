@@ -43,6 +43,10 @@ private:
 	int sekunden2 = 0;
 	bool zeitAbgelaufen = false;
 	int countBonusPoints = 0;
+	int zufallszahlBonus = 1;
+	int bonusPointX = 0;
+	int bonusPointY = 0;
+	bool bonusOnMap = false;
 
 	bool MoveRight = false;
 	bool MoveLeft = false;
