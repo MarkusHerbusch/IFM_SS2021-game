@@ -738,6 +738,11 @@ void Game::update()
 		isRunning = false;
 	}
 
+	if (minuten == 0 && sekunden1 == 0 && sekunden2 == 0) {
+		stopAll = true;
+		isRunning = false;
+	}
+
 
 
 
