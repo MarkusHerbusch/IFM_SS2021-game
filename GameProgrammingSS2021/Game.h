@@ -12,7 +12,7 @@ using namespace std;
 class Game {
 
 public:
-	Game(int gamelevel, int gameScore);
+	Game(int gamelevel, int gameScore, int bonus);
 	~Game();
 
 	void init(const char* title, int farbeSpieler, int xpos, int ypos, int width, int height, bool fullscreen);
@@ -42,6 +42,7 @@ private:
 	int sekunden1 = 0;
 	int sekunden2 = 0;
 	bool zeitAbgelaufen = false;
+	int countBonusPoints = 0;
 
 	bool MoveRight = false;
 	bool MoveLeft = false;

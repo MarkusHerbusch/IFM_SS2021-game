@@ -13,15 +13,20 @@ SDL_Texture* timeSeconds1Tex;
 SDL_Texture* timeSeconds2Tex;
 SDL_Texture* timePointTex;
 SDL_Texture* textLevelTex;
-SDL_Texture* levelNumberTex;
+SDL_Texture* levelNumberTex; 
+SDL_Texture* textBonusTex;
+SDL_Texture* bonusNumberTex;
 SDL_Rect scrR, destR;
 SDL_Rect textScoreR;
 SDL_Rect scoreR;
 SDL_Rect textLevelR, levelNumberR;
 SDL_Rect timeMinutesR, timeSeconds1R, timeSeconds2R, timePointR;
+SDL_Rect textBonusR, bonuslNumberR; 
 TTF_Font* font42;
+TTF_Font* font28;
 SDL_Color yellow = { 255, 255, 0 };
 SDL_Color black = { 0, 0, 0 };
+SDL_Color green = { 0, 255, 0 };
 SDL_Color colorTime = { 0, 255, 0 };
 
 
@@ -32,6 +37,7 @@ struct IntPair {
 struct ReturnGame {
 	int score;
 	bool run;
+	int bonus;
 };
 
 struct WallReturn {
@@ -42,10 +48,11 @@ struct WallReturn {
 Map* map;
 SDL_Renderer* Game::renderer = nullptr;
 
-Game::Game(int gamelevel, int gameScore)
+Game::Game(int gamelevel, int gameScore, int bonus)
 {
 	level = gamelevel;
 	score = gameScore;
+	countBonusPoints = bonus;
 
 	switch (level)
 	{
@@ -191,6 +198,11 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	{
 		std::cerr << "Konnte Schriftart nicht laden! Fehler: " << TTF_GetError() << std::endl;
 	}
+	font28 = TTF_OpenFont("assets/arial.ttf", 28);
+	if (!font28)
+	{
+		std::cerr << "Konnte Schriftart nicht laden! Fehler: " << TTF_GetError() << std::endl;
+	}
 
 	//Anzeige Text Score
 	SDL_Surface* textScoreS = TTF_RenderText_Solid(font42, "Score:", yellow);
@@ -302,6 +314,34 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	levelNumberR.y = 10;
 	levelNumberR.w = wLevelNumber;
 	levelNumberR.h = hLevelNumber;
+
+	//Anzeige Text Bonuspunkte
+	SDL_Surface* textBonusS = TTF_RenderText_Solid(font28, "Bonuspunkte:", green);
+	textBonusTex = SDL_CreateTextureFromSurface(renderer, textBonusS);
+	SDL_FreeSurface(textBonusS);
+
+	int wTextBonus = 0;
+	int hTextBonus = 0;
+	TTF_SizeText(font28, "Bonuspunkte:", &wTextBonus, &hTextBonus);
+	textBonusR.x = 10;
+	textBonusR.y = 70;
+	textBonusR.w = wTextBonus;
+	textBonusR.h = hTextBonus;
+
+	//Anzeige Bonuspunkte
+	std::string tmpBonusNumber = std::to_string(countBonusPoints);
+	char const* bonus_char = tmpBonusNumber.c_str();
+	SDL_Surface* bonusNumberS = TTF_RenderText_Solid(font42, bonus_char, green);
+	bonusNumberTex = SDL_CreateTextureFromSurface(renderer, bonusNumberS);
+	SDL_FreeSurface(bonusNumberS);
+
+	int wBonusNumber = 0;
+	int hBonusNumber = 0;
+	TTF_SizeText(font42, bonus_char, &wBonusNumber, &hBonusNumber);
+	bonuslNumberR.x = ((6*32) - wBonusNumber) /2;
+	bonuslNumberR.y = 100;
+	bonuslNumberR.w = wBonusNumber;
+	bonuslNumberR.h = hBonusNumber;
 	
 }
 
@@ -509,10 +549,14 @@ timeSeconds2R.h = hSeconds2;
 
 		struct IntPair ret;
 
-		ret = map->ChangeMapAddPoint(level);
+		//verhindern, dass Punkte an bereits besetzten Stellen erscheinen
+		do {
+			ret = map->ChangeMapAddPoint(level);
 
-		zahlX = ret.second;
-		zahlY = ret.first;
+			zahlX = ret.second;
+			zahlY = ret.first;
+		}
+		while (zahlX == 0 && zahlY == 0);
 
 		cout << zahlX << zahlY;
 
@@ -567,7 +611,7 @@ timeSeconds2R.h = hSeconds2;
 		xWall = wallArray[i][0];
 		yWall = wallArray[i][1];
 
-		std::cout << i << "xWall: " << xWall << ", yWall:  " << yWall << std::endl;
+		//std::cout << i << "xWall: " << xWall << ", yWall:  " << yWall << std::endl;
 
 		//Berührung von links
 		if (MoveRight && x > ((xWall * 32) - 75) && x < ((xWall * 32) + 10 - 75) && y > ((yWall * 32) - 75) && y < ((yWall * 32) + 32))
@@ -660,6 +704,8 @@ void Game::render()
 	SDL_RenderCopy(renderer, timePointTex, NULL, &timePointR);
 	SDL_RenderCopy(renderer, textLevelTex, NULL, &textLevelR);
 	SDL_RenderCopy(renderer, levelNumberTex, NULL, &levelNumberR);
+	SDL_RenderCopy(renderer, textBonusTex, NULL, &textBonusR);
+	SDL_RenderCopy(renderer, bonusNumberTex, NULL, &bonuslNumberR);
 	
 	SDL_RenderPresent(renderer);
 }
@@ -674,6 +720,7 @@ struct ReturnGame Game::clean()
 	struct ReturnGame ret;
 	ret.score = score;
 	ret.run = stopAll;
+	ret.bonus = countBonusPoints;
 
 	return ret;
 }

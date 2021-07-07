@@ -6,7 +6,7 @@
 
 int level1[25][50] = {
 	{ 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,5,5,5,5,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2 },
-	{ 2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
+	{ 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,6,6,6,6,6,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4 },
 	{ 2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 	{ 2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
 	{ 2,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 },
@@ -412,6 +412,8 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 	// 22 Möglichkeiten, 43 Möglichkeiten
 
 
+
+	
 	std::srand(std::time(nullptr));
 
 	int randomNumber1 = (rand() % 22) + 2;
@@ -420,48 +422,110 @@ struct IntPair Map::ChangeMapAddPoint(int level)
 	cout << "Zahl1: " << randomNumber1 << endl;
 	cout << "Zahl2: " << randomNumber2 << endl;
 
+	
+	
 
 	switch (level)
 	{
 	case 1:
-		level1[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level1);
+		if (level1[randomNumber1][randomNumber2] == 0) {
+			level1[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level1);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 2:
-		level2[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level2);
+		if (level2[randomNumber1][randomNumber2] == 0) {
+			level2[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level2);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 3:
-		level3[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level3);
+		if (level3[randomNumber1][randomNumber2] == 0) {
+			level3[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level3);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 4:
-		level4[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level4);
+		if (level4[randomNumber1][randomNumber2] == 0) {
+			level4[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level4);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 5:
-		level5[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level5);
+		if (level5[randomNumber1][randomNumber2] == 0) {
+			level5[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level5);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 6:
-		level6[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level6);
+		if (level6[randomNumber1][randomNumber2] == 0) {
+			level6[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level6);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 7:
-		level7[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level7);
+		if (level7[randomNumber1][randomNumber2] == 0) {
+			level7[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level7);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 8:
-		level8[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level8);
+		if (level8[randomNumber1][randomNumber2] == 0) {
+			level8[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level8);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 9:
-		level9[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level9);
+		if (level9[randomNumber1][randomNumber2] == 0) {
+			level9[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level9);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 	case 10:
-		level10[randomNumber1][randomNumber2] = 8;
-		Map::LoadMap(level10);
+		if (level10[randomNumber1][randomNumber2] == 0) {
+			level10[randomNumber1][randomNumber2] = 8;
+			Map::LoadMap(level10);
+		}
+		else {
+			randomNumber1 = 0;
+			randomNumber2 = 0;
+		}
 		break;
 
 	default:
