@@ -53,7 +53,7 @@ private:
 	bool MoveUp = false;
 	bool MoveDown = false;
 
-	bool geschwindigkeitPress = false;
+	int geschwindigkeitLevel = 1;
 	int geschwindigkeit = 2;
 
 	int level = 1;

@@ -17,18 +17,27 @@ SDL_Texture* textLevelTex;
 SDL_Texture* levelNumberTex; 
 SDL_Texture* textBonusTex;
 SDL_Texture* bonusNumberTex;
+SDL_Texture* textTempoTex;
+SDL_Texture* textTempo2Tex;
+SDL_Texture* textTempo3Tex;
+SDL_Texture* textTempo4Tex;
+SDL_Texture* textTempo5Tex;
+SDL_Texture* numberTempoTex;
 SDL_Rect scrR, destR;
 SDL_Rect textScoreR;
 SDL_Rect scoreR;
 SDL_Rect textLevelR, levelNumberR;
 SDL_Rect timeMinutesR, timeSeconds1R, timeSeconds2R, timePointR;
 SDL_Rect textBonusR, bonuslNumberR; 
+SDL_Rect textTempoR, textTempo2R, textTempo3R, textTempo4R, textTempo5R, numberTempoR;
 TTF_Font* font42;
 TTF_Font* font28;
+TTF_Font* font26;
 SDL_Color yellow = { 255, 255, 0 };
 SDL_Color black = { 0, 0, 0 };
 SDL_Color green = { 0, 255, 0 };
-SDL_Color colorTime = { 0, 255, 0 };
+SDL_Color red = { 255, 0 , 0 };
+SDL_Color colorTime;
 
 
 struct IntPair {
@@ -54,6 +63,7 @@ Game::Game(int gamelevel, int gameScore, int bonus)
 	level = gamelevel;
 	score = gameScore;
 	countBonusPoints = bonus;
+	colorTime = { 0, 255, 0 };
 
 	switch (level)
 	{
@@ -97,9 +107,9 @@ Game::Game(int gamelevel, int gameScore, int bonus)
 	//Zufallszahl erzeugen (in welchem zeitlichen Abstand erscheinen die Bonuspunkte)
 	std::random_device rd;
 	std::default_random_engine eng(rd());
-	std::uniform_int_distribution<int> distr(900, 2700);
+	std::uniform_int_distribution<int> distr(300, 1200);
 	zufallszahlBonus = distr(eng);
-	std::cout << "Zufallszahl: " << zufallszahlBonus << std::endl;
+	std::cout << "Zufallszahl: " << zufallszahlBonus/60 << std::endl;
 }
 
 Game::~Game()
@@ -189,8 +199,8 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 		x = returnWall.x;
 		y = returnWall.y;
 
-		std::cout << "WallX Nr. " << i << ": " << x << std::endl;
-		std::cout << "WallY Nr. " << i << ": " << y << std::endl;
+		//std::cout << "WallX Nr. " << i << ": " << x << std::endl;
+		//std::cout << "WallY Nr. " << i << ": " << y << std::endl;
 
 		wallArray[i][0] = x;
 		wallArray[i][1] = y;
@@ -212,6 +222,11 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	{
 		std::cerr << "Konnte Schriftart nicht laden! Fehler: " << TTF_GetError() << std::endl;
 	}
+	font26 = TTF_OpenFont("assets/arial.ttf", 26);
+	if (!font26)
+	{
+		std::cerr << "Konnte Schriftart nicht laden! Fehler: " << TTF_GetError() << std::endl;
+	}
 
 	//Anzeige Text Score
 	SDL_Surface* textScoreS = TTF_RenderText_Solid(font42, "Score:", yellow);
@@ -221,7 +236,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	int wTextScore = 0;
 	int hTextScore = 0;
 	TTF_SizeText(font42, "Score:", &wTextScore, &hTextScore);
-	std::cout << "Width : " << wTextScore << "\nHeight: " << hTextScore << std::endl;
+	//std::cout << "Width : " << wTextScore << "\nHeight: " << hTextScore << std::endl;
 	textScoreR.x = 1350;
 	textScoreR.y = 10;
 	textScoreR.w = wTextScore;
@@ -237,7 +252,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	int wScore = 0;
 	int hScore = 0;
 	TTF_SizeText(font42, score_char, &wScore, &hScore);
-	std::cout << "Width : " << wScore << "\nHeight: " << hScore << std::endl;
+	//std::cout << "Width : " << wScore << "\nHeight: " << hScore << std::endl;
 	scoreR.x = 1480;
 	scoreR.y = 10;
 	scoreR.w = wScore;
@@ -251,7 +266,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	int wMinutes = 0;
 	int hMinutes = 0;
 	TTF_SizeText(font42, "2", &wMinutes, &hMinutes);
-	std::cout << "Width : " << wMinutes << "\nHeight: " << hMinutes << std::endl;
+	//std::cout << "Width : " << wMinutes << "\nHeight: " << hMinutes << std::endl;
 	timeMinutesR.x = 800;
 	timeMinutesR.y = 10;
 	timeMinutesR.w = wMinutes;
@@ -332,7 +347,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	int wTextBonus = 0;
 	int hTextBonus = 0;
 	TTF_SizeText(font28, "Bonuspunkte:", &wTextBonus, &hTextBonus);
-	textBonusR.x = 10;
+	textBonusR.x = ((6 * 32) - wTextBonus) / 2;
 	textBonusR.y = 70;
 	textBonusR.w = wTextBonus;
 	textBonusR.h = hTextBonus;
@@ -352,6 +367,86 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	bonuslNumberR.w = wBonusNumber;
 	bonuslNumberR.h = hBonusNumber;
 	
+	//Anzeige Text Schnelligkeit
+	SDL_Surface* textTempoS = TTF_RenderText_Solid(font26, "Schnelligkeit", black);
+	textTempoTex = SDL_CreateTextureFromSurface(renderer, textTempoS);
+	SDL_FreeSurface(textTempoS);
+
+	int wTextTempo = 0;
+	int hTextTempo = 0;
+	TTF_SizeText(font26, "Schnelligkeit", &wTextTempo, &hTextTempo);
+	textTempoR.x = ((6 * 32) - wTextTempo) / 2;
+	textTempoR.y = 180;
+	textTempoR.w = wTextTempo;
+	textTempoR.h = hTextTempo;
+
+	//Anzeige Text Schnelligkeit2
+	SDL_Surface* textTempo2S = TTF_RenderText_Solid(font26, "erhöhen", black);
+	textTempo2Tex = SDL_CreateTextureFromSurface(renderer, textTempo2S);
+	SDL_FreeSurface(textTempo2S);
+
+	int wTextTempo2 = 0;
+	int hTextTempo2 = 0;
+	TTF_SizeText(font26, "erhöhen", &wTextTempo2, &hTextTempo2);
+	textTempo2R.x = ((6 * 32) - wTextTempo2) / 2;
+	textTempo2R.y = 210;
+	textTempo2R.w = wTextTempo2;
+	textTempo2R.h = hTextTempo2;
+
+	//Anzeige Text Schnelligkeit3
+	SDL_Surface* textTempo3S = TTF_RenderText_Solid(font28, "Kosten: 1", red);
+	textTempo3Tex = SDL_CreateTextureFromSurface(renderer, textTempo3S);
+	SDL_FreeSurface(textTempo3S);
+
+	int wTextTempo3 = 0;
+	int hTextTempo3 = 0;
+	TTF_SizeText(font28, "Kosten: 1", &wTextTempo3, &hTextTempo3);
+	textTempo3R.x = ((6 * 32) - wTextTempo3) / 2;
+	textTempo3R.y = 250;
+	textTempo3R.w = wTextTempo3;
+	textTempo3R.h = hTextTempo3;
+
+	//Anzeige Text Schnelligkeit4
+	SDL_Surface* textTempo4S = TTF_RenderText_Solid(font26, "Drücke Taste 1", red);
+	textTempo4Tex = SDL_CreateTextureFromSurface(renderer, textTempo4S);
+	SDL_FreeSurface(textTempo4S);
+
+	int wTextTempo4 = 0;
+	int hTextTempo4 = 0;
+	TTF_SizeText(font26, "Drücke Taste 1", &wTextTempo4, &hTextTempo4);
+	textTempo4R.x = ((6 * 32) - wTextTempo4) / 2;
+	textTempo4R.y = 280;
+	textTempo4R.w = wTextTempo4;
+	textTempo4R.h = hTextTempo4;
+
+	//Anzeige Text Schnelligkeit5
+	SDL_Surface* textTempo5S = TTF_RenderText_Solid(font28, "Stufe    / 5", green);
+	textTempo5Tex = SDL_CreateTextureFromSurface(renderer, textTempo5S);
+	SDL_FreeSurface(textTempo5S);
+
+	int wTextTempo5 = 0;
+	int hTextTempo5 = 0;
+	TTF_SizeText(font28, "Stufe    / 5", &wTextTempo5, &hTextTempo5);
+	textTempo5R.x = ((6 * 32) - wTextTempo5) / 2;
+	textTempo5R.y = 310;
+	textTempo5R.w = wTextTempo5;
+	textTempo5R.h = hTextTempo5;
+
+	//Anzeige Text Schnelligkeit Nummer
+	std::string tmpTempoNumber = std::to_string(geschwindigkeitLevel);
+	char const* tempo_char = tmpTempoNumber.c_str();
+	SDL_Surface* numberTempoS = TTF_RenderText_Solid(font28, tempo_char, green);
+	numberTempoTex = SDL_CreateTextureFromSurface(renderer, numberTempoS);
+	SDL_FreeSurface(numberTempoS);
+
+	int wNumberTempo = 0;
+	int hNumberTempo = 0;
+	TTF_SizeText(font28, tempo_char, &wNumberTempo, &hNumberTempo);
+	numberTempoR.x = 107;
+	numberTempoR.y = 310;
+	numberTempoR.w = wNumberTempo;
+	numberTempoR.h = hNumberTempo;
+
 }
 
 void Game::handleEvents()
@@ -443,7 +538,63 @@ void Game::handleEvents()
 				break;
 
 			case SDLK_1:
-				geschwindigkeitPress = true;
+				if (countBonusPoints >= 1 && geschwindigkeit <= 5)
+				{
+		
+					geschwindigkeit++;
+					geschwindigkeitLevel = geschwindigkeit - 1;
+					countBonusPoints--;
+
+					//Anzeige Bonuspunkte
+					std::string tmpBonusNumber = std::to_string(countBonusPoints);
+					char const* bonus_char = tmpBonusNumber.c_str();
+					SDL_Surface* bonusNumberS = TTF_RenderText_Solid(font42, bonus_char, green);
+					bonusNumberTex = SDL_CreateTextureFromSurface(renderer, bonusNumberS);
+					SDL_FreeSurface(bonusNumberS);
+
+					int wBonusNumber = 0;
+					int hBonusNumber = 0;
+					TTF_SizeText(font42, bonus_char, &wBonusNumber, &hBonusNumber);
+					bonuslNumberR.x = ((6 * 32) - wBonusNumber) / 2;
+					bonuslNumberR.y = 100;
+					bonuslNumberR.w = wBonusNumber;
+					bonuslNumberR.h = hBonusNumber;
+
+					//Anzeige Text Schnelligkeit Nummer
+					std::string tmpTempoNumber = std::to_string(geschwindigkeitLevel);
+					char const* tempo_char = tmpTempoNumber.c_str();
+					SDL_Surface* numberTempoS = TTF_RenderText_Solid(font28, tempo_char, green);
+					numberTempoTex = SDL_CreateTextureFromSurface(renderer, numberTempoS);
+					SDL_FreeSurface(numberTempoS);
+
+					int wNumberTempo = 0;
+					int hNumberTempo = 0;
+					TTF_SizeText(font28, tempo_char, &wNumberTempo, &hNumberTempo);
+					numberTempoR.x = 107;
+					numberTempoR.y = 310;
+					numberTempoR.w = wNumberTempo;
+					numberTempoR.h = hNumberTempo;
+				}
+				
+				break;
+
+			case SDLK_2:
+				minuten++;
+				colorTime = { 0, 255, 0 };
+
+				if (true) {
+					std::string tmp10 = std::to_string(minuten);
+					char const* minutes_char = tmp10.c_str();
+					SDL_Surface* timeMinutesS = TTF_RenderText_Solid(font42, minutes_char, colorTime);
+					timeMinutesTex = SDL_CreateTextureFromSurface(renderer, timeMinutesS);
+					SDL_FreeSurface(timeMinutesS);
+					int wMinutes = 0;
+					int hMinutes = 0;
+					TTF_SizeText(font42, minutes_char, &wMinutes, &hMinutes);
+					timeMinutesR.w = wMinutes;
+					timeMinutesR.h = hMinutes;
+				}
+				
 				break;
 
 			default:
@@ -467,10 +618,7 @@ void Game::update()
 		isRunning = false;
 	}
 
-	if (geschwindigkeitPress == true && geschwindigkeit < 6) {
-		geschwindigkeit++;
-		geschwindigkeitPress = false;
-	}
+
 
 
 	//Timer aktualisieren, alle 60 Frames
@@ -588,6 +736,13 @@ void Game::update()
 		} while (bonusPointX == 0 && bonusPointY == 0);
 
 		bonusOnMap = true;
+
+		//neue Zufallszahl
+		std::random_device rd;
+		std::default_random_engine eng(rd());
+		std::uniform_int_distribution<int> distr(300, 1200);
+		zufallszahlBonus = distr(eng);
+		std::cout << "Zufallszahl: " << zufallszahlBonus / 60 << std::endl;
 	}
 
 
@@ -748,7 +903,7 @@ void Game::render()
 {
 	SDL_RenderClear(renderer);
 	map->DrawMap();
-	//this is where we would add stuff to render
+	//alles was gerendert werden muss
 	SDL_RenderCopy(renderer, playerTex, NULL, &destR);
 	SDL_RenderCopy(renderer, textScoreTex, NULL, &textScoreR);
 	SDL_RenderCopy(renderer, scoreTex, NULL, &scoreR);
@@ -759,7 +914,13 @@ void Game::render()
 	SDL_RenderCopy(renderer, textLevelTex, NULL, &textLevelR);
 	SDL_RenderCopy(renderer, levelNumberTex, NULL, &levelNumberR);
 	SDL_RenderCopy(renderer, textBonusTex, NULL, &textBonusR);
-	SDL_RenderCopy(renderer, bonusNumberTex, NULL, &bonuslNumberR);
+	SDL_RenderCopy(renderer, bonusNumberTex, NULL, &bonuslNumberR); 
+	SDL_RenderCopy(renderer, textTempoTex, NULL, &textTempoR);
+	SDL_RenderCopy(renderer, textTempo2Tex, NULL, &textTempo2R);
+	SDL_RenderCopy(renderer, textTempo3Tex, NULL, &textTempo3R);
+	SDL_RenderCopy(renderer, textTempo4Tex, NULL, &textTempo4R);
+	SDL_RenderCopy(renderer, textTempo5Tex, NULL, &textTempo5R);
+	SDL_RenderCopy(renderer, numberTempoTex, NULL, &numberTempoR);
 	
 	SDL_RenderPresent(renderer);
 }

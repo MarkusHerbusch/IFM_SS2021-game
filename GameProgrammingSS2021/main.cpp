@@ -50,7 +50,7 @@ int main(int argc, const char* argv[])
 	farbeSpieler = ret.chara;
 	stopAll = ret.run;
 
-	while (stopAll == false && gamelevel <= 2) {
+	while (stopAll == false && gamelevel <= 3) {
 
 		game = new Game(gamelevel, score, bonus);
 		game->init("Spiel", farbeSpieler, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 800, false);
