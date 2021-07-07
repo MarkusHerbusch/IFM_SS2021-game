@@ -1,5 +1,6 @@
 #include "Map.h"
 #include "TextureManager.h"
+#include <iostream>
 #include <random>
 #include <ctime>
 
@@ -423,10 +424,16 @@ struct IntPair Map::ChangeMapAddPoint(int level, bool red)
 		number = 9;
 	}
 
-	std::srand(std::time(nullptr));
+	//std::srand(std::time(nullptr));
+	//int randomNumber1 = (rand() % 22) + 2;
+	//int randomNumber2 = (rand() % 43) + 6;
 
-	int randomNumber1 = (rand() % 22) + 2;
-	int randomNumber2 = (rand() % 43) + 6;
+	std::random_device rd;
+	std::default_random_engine eng(rd());
+	std::uniform_int_distribution<int> distr(2, 23);
+	int randomNumber1 = distr(eng);
+	std::uniform_int_distribution<int> distr2(6, 48);
+	int randomNumber2 = distr2(eng);
 
 	cout << "Zahl1: " << randomNumber1 << endl;
 	cout << "Zahl2: " << randomNumber2 << endl;
