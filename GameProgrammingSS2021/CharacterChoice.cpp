@@ -31,7 +31,7 @@ SDL_Rect player7R;
 SDL_Rect text1R, text2R;
 SDL_Rect number1R, number2R, number3R, number4R, number5R, number6R, number7R;
 
-TTF_Font* fontCharacter;
+TTF_Font* fontCharakterChoice;
 SDL_Color blackColor = { 0, 0, 0 };
 
 struct ReturnCharacter {
@@ -153,115 +153,115 @@ void CharacterChoice::init(const char* title, int xpos, int ypos, int width, int
 		std::cerr << "Konnte SDL_ttf nicht initialisieren! Fehler: " << TTF_GetError() << std::endl;
 	}
 
-	fontCharacter = TTF_OpenFont("assets/arial.ttf", 60);
-	if (!fontCharacter)
+	fontCharakterChoice = TTF_OpenFont("assets/arial.ttf", 60);
+	if (!fontCharakterChoice)
 	{
 		std::cerr << "Konnte Schriftart nicht laden! Fehler: " << TTF_GetError() << std::endl;
 	}
 
 	//Text1
-	SDL_Surface* text1S = TTF_RenderText_Solid(fontCharacter, "Wähle deinen Charakter für das Spiel aus!", blackColor);
+	SDL_Surface* text1S = TTF_RenderText_Solid(fontCharakterChoice, "Wähle deinen Charakter für das Spiel aus!", blackColor);
 	text1Tex = SDL_CreateTextureFromSurface(renderer, text1S);
 	SDL_FreeSurface(text1S);
 	int wText1 = 0;
 	int hText1 = 0;
-	TTF_SizeText(fontCharacter, "Wähle deinen Charakter für das Spiel aus!", &wText1, &hText1);
-	text1R.x = (1600 - wText1) / 2;;
+	TTF_SizeText(fontCharakterChoice, "Wähle deinen Charakter für das Spiel aus!", &wText1, &hText1);
+	text1R.x = (1600 - wText1) / 2;
 	text1R.y = 30;
 	text1R.w = wText1;
 	text1R.h = hText1;
 
 	//Text2
-	SDL_Surface* text2S = TTF_RenderText_Solid(fontCharacter, "Drücke dafür die entsprechende Nummer.", blackColor);
+	SDL_Surface* text2S = TTF_RenderText_Solid(fontCharakterChoice, "Drücke dafür die entsprechende Nummer.", blackColor);
 	text2Tex = SDL_CreateTextureFromSurface(renderer, text2S);
 	SDL_FreeSurface(text2S);
 	int wText2 = 0;
 	int hText2 = 0;
-	TTF_SizeText(fontCharacter, "Drücke dafür die entsprechende Nummer.", &wText2, &hText2);
+	TTF_SizeText(fontCharakterChoice, "Drücke dafür die entsprechende Nummer.", &wText2, &hText2);
 	text2R.x = (1600 - wText2) / 2;
 	text2R.y = 110;
 	text2R.w = wText2;
 	text2R.h = hText2;
 
 	//Number1
-	SDL_Surface* number1S = TTF_RenderText_Solid(fontCharacter, "1", blackColor);
+	SDL_Surface* number1S = TTF_RenderText_Solid(fontCharakterChoice, "1", blackColor);
 	number1Tex = SDL_CreateTextureFromSurface(renderer, number1S);
 	SDL_FreeSurface(number1S);
 	int wnumber1 = 0;
 	int hnumber1 = 0;
-	TTF_SizeText(fontCharacter, "1", &wnumber1, &hnumber1);
+	TTF_SizeText(fontCharakterChoice, "1", &wnumber1, &hnumber1);
 	number1R.x = (150 - wnumber1) /2 + 68;
 	number1R.y = 500;
 	number1R.w = wnumber1;
 	number1R.h = hnumber1;
 
 	//Number2
-	SDL_Surface* number2S = TTF_RenderText_Solid(fontCharacter, "2", blackColor);
+	SDL_Surface* number2S = TTF_RenderText_Solid(fontCharakterChoice, "2", blackColor);
 	number2Tex = SDL_CreateTextureFromSurface(renderer, number2S);
 	SDL_FreeSurface(number2S);
 	int wnumber2 = 0;
 	int hnumber2 = 0;
-	TTF_SizeText(fontCharacter, "2", &wnumber2, &hnumber2);
+	TTF_SizeText(fontCharakterChoice, "2", &wnumber2, &hnumber2);
 	number2R.x = (150 - wnumber2) / 2 + 286;
 	number2R.y = 500;
 	number2R.w = wnumber2;
 	number2R.h = hnumber2;
 
 	//Number3
-	SDL_Surface* number3S = TTF_RenderText_Solid(fontCharacter, "3", blackColor);
+	SDL_Surface* number3S = TTF_RenderText_Solid(fontCharakterChoice, "3", blackColor);
 	number3Tex = SDL_CreateTextureFromSurface(renderer, number3S);
 	SDL_FreeSurface(number3S);
 	int wnumber3 = 0;
 	int hnumber3 = 0;
-	TTF_SizeText(fontCharacter, "3", &wnumber3, &hnumber3);
+	TTF_SizeText(fontCharakterChoice, "3", &wnumber3, &hnumber3);
 	number3R.x = (150 - wnumber3) / 2 + 504;
 	number3R.y = 500;
 	number3R.w = wnumber3;
 	number3R.h = hnumber3;
 
 	//Number4
-	SDL_Surface* number4S = TTF_RenderText_Solid(fontCharacter, "4", blackColor);
+	SDL_Surface* number4S = TTF_RenderText_Solid(fontCharakterChoice, "4", blackColor);
 	number4Tex = SDL_CreateTextureFromSurface(renderer, number4S);
 	SDL_FreeSurface(number4S);
 	int wnumber4 = 0;
 	int hnumber4 = 0;
-	TTF_SizeText(fontCharacter, "4", &wnumber4, &hnumber4);
+	TTF_SizeText(fontCharakterChoice, "4", &wnumber4, &hnumber4);
 	number4R.x = (150 - wnumber4) / 2 + 722;
 	number4R.y = 500;
 	number4R.w = wnumber4;
 	number4R.h = hnumber4;
 
 	//Number5
-	SDL_Surface* number5S = TTF_RenderText_Solid(fontCharacter, "5", blackColor);
+	SDL_Surface* number5S = TTF_RenderText_Solid(fontCharakterChoice, "5", blackColor);
 	number5Tex = SDL_CreateTextureFromSurface(renderer, number5S);
 	SDL_FreeSurface(number5S);
 	int wnumber5 = 0;
 	int hnumber5 = 0;
-	TTF_SizeText(fontCharacter, "5", &wnumber5, &hnumber5);
+	TTF_SizeText(fontCharakterChoice, "5", &wnumber5, &hnumber5);
 	number5R.x = (150 - wnumber5) / 2 + 940;
 	number5R.y = 500;
 	number5R.w = wnumber5;
 	number5R.h = hnumber5;
 
 	//Number6
-	SDL_Surface* number6S = TTF_RenderText_Solid(fontCharacter, "6", blackColor);
+	SDL_Surface* number6S = TTF_RenderText_Solid(fontCharakterChoice, "6", blackColor);
 	number6Tex = SDL_CreateTextureFromSurface(renderer, number6S);
 	SDL_FreeSurface(number6S);
 	int wnumber6 = 0;
 	int hnumber6 = 0;
-	TTF_SizeText(fontCharacter, "6", &wnumber6, &hnumber6);
+	TTF_SizeText(fontCharakterChoice, "6", &wnumber6, &hnumber6);
 	number6R.x = (150 - wnumber6) / 2 + 1158;
 	number6R.y = 500;
 	number6R.w = wnumber6;
 	number6R.h = hnumber6;
 
 	//Number7
-	SDL_Surface* number7S = TTF_RenderText_Solid(fontCharacter, "7", blackColor);
+	SDL_Surface* number7S = TTF_RenderText_Solid(fontCharakterChoice, "7", blackColor);
 	number7Tex = SDL_CreateTextureFromSurface(renderer, number7S);
 	SDL_FreeSurface(number7S);
 	int wnumber7 = 0;
 	int hnumber7 = 0;
-	TTF_SizeText(fontCharacter, "7", &wnumber7, &hnumber7);
+	TTF_SizeText(fontCharakterChoice, "7", &wnumber7, &hnumber7);
 	number7R.x = (150 - wnumber7) / 2 + 1376;
 	number7R.y = 500;
 	number7R.w = wnumber7;

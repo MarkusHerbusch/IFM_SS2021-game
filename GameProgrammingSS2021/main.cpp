@@ -1,8 +1,10 @@
 #include "CharacterChoice.h"
 #include "Game.h"
+#include "Message.h"
 
 CharacterChoice* characterChoice = nullptr;
 Game* game = nullptr;
+Message* message = nullptr;
 
 struct ReturnCharacter {
 	int chara;
@@ -13,6 +15,7 @@ struct ReturnGame {
 	int score;
 	bool run;
 	int bonus;
+	bool time;
 };
 
 int gamelevel = 1;
@@ -30,6 +33,7 @@ int main(int argc, const char* argv[])
 	int frameTime;
 	int farbeSpieler;
 	bool stopAll;
+	bool zeitAbgelaufen;
 
 	
 
@@ -50,7 +54,7 @@ int main(int argc, const char* argv[])
 	farbeSpieler = ret.chara;
 	stopAll = ret.run;
 
-	while (stopAll == false && gamelevel <= 3) {
+	while (stopAll == false && gamelevel <= 10) {
 
 		game = new Game(gamelevel, score, bonus);
 		game->init("Spiel", farbeSpieler, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 800, false);
@@ -75,7 +79,21 @@ int main(int argc, const char* argv[])
 		score = retGame.score;
 		stopAll = retGame.run;
 		bonus = retGame.bonus;
+		zeitAbgelaufen = retGame.time;
 		gamelevel++;
+
+		if (stopAll == false || zeitAbgelaufen)
+		{
+			message = new Message();
+			message->init("Message", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 400, false, score, gamelevel-1, zeitAbgelaufen);
+			while (message->running()) {
+
+				message->handleEvents();
+				message->render();
+			}
+			message->clean();
+		}
+
 
 	}
 	return 0;

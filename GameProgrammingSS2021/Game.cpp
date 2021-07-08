@@ -6,6 +6,7 @@
 #include <iostream>
 #include <random>
 
+
 SDL_Texture* playerTex;
 SDL_Texture* textScoreTex;
 SDL_Texture* scoreTex;
@@ -55,6 +56,7 @@ struct ReturnGame {
 	int score;
 	bool run;
 	int bonus;
+	bool time;
 };
 
 struct WallReturn {
@@ -266,7 +268,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	scoreR.h = hScore;
 
 	//Anzeige Minuten
-	SDL_Surface* timeMinutesS = TTF_RenderText_Solid(font42, "2", colorTime);
+	SDL_Surface* timeMinutesS = TTF_RenderText_Solid(font42, "1", colorTime);
 	timeMinutesTex = SDL_CreateTextureFromSurface(renderer, timeMinutesS);
 	SDL_FreeSurface(timeMinutesS);
 
@@ -280,7 +282,7 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	timeMinutesR.h = hMinutes;
 
 	//Anzeige Sekunden1
-	SDL_Surface* timeSeconds1S = TTF_RenderText_Solid(font42, "0", colorTime);
+	SDL_Surface* timeSeconds1S = TTF_RenderText_Solid(font42, "3", colorTime);
 	timeSeconds1Tex = SDL_CreateTextureFromSurface(renderer, timeSeconds1S);
 	SDL_FreeSurface(timeSeconds1S);
 
@@ -735,12 +737,14 @@ void Game::update()
 
 
 	if (scoreLevel == levelMaxPoints) {
+
 		isRunning = false;
 	}
 
 	if (minuten == 0 && sekunden1 == 0 && sekunden2 == 0) {
 		stopAll = true;
 		isRunning = false;
+		zeitAbgelaufen = true;
 	}
 
 
@@ -1067,6 +1071,7 @@ struct ReturnGame Game::clean()
 	ret.score = score;
 	ret.run = stopAll;
 	ret.bonus = countBonusPoints;
+	ret.time = zeitAbgelaufen;
 
 	return ret;
 }

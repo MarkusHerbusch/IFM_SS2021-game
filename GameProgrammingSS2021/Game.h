@@ -38,8 +38,8 @@ private:
 	int levelMaxPoints = 15;
 	int score = 0;
 	int scoreLevel = 0;
-	int minuten = 2;
-	int sekunden1 = 0;
+	int minuten = 1;
+	int sekunden1 = 3;
 	int sekunden2 = 0;
 	bool zeitAbgelaufen = false;
 	int countBonusPoints = 0;
