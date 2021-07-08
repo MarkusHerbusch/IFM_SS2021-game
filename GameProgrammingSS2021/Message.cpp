@@ -254,7 +254,6 @@ void Message::handleEvents()
 		switch (event.key.keysym.sym)
 		{
 		case SDLK_RETURN:
-			//charakter = 1;
 			isRunning = false;
 			break;
 
@@ -271,7 +270,7 @@ void Message::handleEvents()
 void Message::render()
 {
 	SDL_RenderClear(renderer);
-	//this is where we would add stuff to render
+	
 	SDL_RenderCopy(renderer, textMessage1Tex, NULL, &textMessage1R);
 	SDL_RenderCopy(renderer, textMessage2Tex, NULL, &textMessage2R);
 	SDL_RenderCopy(renderer, textMessageLevelTex, NULL, &textMessageLevelR);

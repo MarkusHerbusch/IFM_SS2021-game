@@ -196,7 +196,6 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 
 	//Anzahl der Hindernisse im Level ermitteln
 	counterWall = map->CountWall(level);
-	std::cerr << "AnzahlWall: " << counterWall << std::endl;
 
 	//Hindernisse feststellen und ins Array schreiben
 	for (int i = 0; i < counterWall; i++)
@@ -207,9 +206,6 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 		returnWall = map->ReturnWallPosition(i, level);
 		x = returnWall.x;
 		y = returnWall.y;
-
-		//std::cout << "WallX Nr. " << i << ": " << x << std::endl;
-		//std::cout << "WallY Nr. " << i << ": " << y << std::endl;
 
 		wallArray[i][0] = x;
 		wallArray[i][1] = y;
@@ -245,7 +241,6 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	int wTextScore = 0;
 	int hTextScore = 0;
 	TTF_SizeText(font42, "Score:", &wTextScore, &hTextScore);
-	//std::cout << "Width : " << wTextScore << "\nHeight: " << hTextScore << std::endl;
 	textScoreR.x = 1350;
 	textScoreR.y = 10;
 	textScoreR.w = wTextScore;
@@ -261,7 +256,6 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	int wScore = 0;
 	int hScore = 0;
 	TTF_SizeText(font42, score_char, &wScore, &hScore);
-	//std::cout << "Width : " << wScore << "\nHeight: " << hScore << std::endl;
 	scoreR.x = 1480;
 	scoreR.y = 10;
 	scoreR.w = wScore;
@@ -275,7 +269,6 @@ void Game::init(const char* title, int farbeSpieler, int xpos, int ypos, int wid
 	int wMinutes = 0;
 	int hMinutes = 0;
 	TTF_SizeText(font42, "2", &wMinutes, &hMinutes);
-	//std::cout << "Width : " << wMinutes << "\nHeight: " << hMinutes << std::endl;
 	timeMinutesR.x = 800;
 	timeMinutesR.y = 10;
 	timeMinutesR.w = wMinutes;
@@ -735,20 +728,18 @@ void Game::update()
 	cnt++;
 	//std::cout << cnt << std::endl;
 
-
+	//Level abgeschlossen?
 	if (scoreLevel == levelMaxPoints) {
 
 		isRunning = false;
 	}
 
+	//Zeit abgelaufen?
 	if (minuten == 0 && sekunden1 == 0 && sekunden2 == 0) {
 		stopAll = true;
 		isRunning = false;
 		zeitAbgelaufen = true;
 	}
-
-
-
 
 	//Timer aktualisieren, alle 60 Frames
 	if (cnt % 60 == 0)
@@ -844,8 +835,6 @@ void Game::update()
 		}
 		while (zahlX == 0 && zahlY == 0);
 
-		cout << zahlX << zahlY;
-
 		points[arrayFuellmenge][0] = zahlX;
 		points[arrayFuellmenge][1] = zahlY;
 		arrayFuellmenge++;
@@ -871,7 +860,7 @@ void Game::update()
 		std::default_random_engine eng(rd());
 		std::uniform_int_distribution<int> distr(300, 1200);
 		zufallszahlBonus = distr(eng);
-		std::cout << "Zufallszahl: " << zufallszahlBonus / 60 << std::endl;
+		//std::cout << "Zufallszahl: " << zufallszahlBonus / 60 << std::endl;
 	}
 
 
@@ -912,14 +901,13 @@ void Game::update()
 		destR.y = y;
 	}
 
+	//Auf Berührung mit Hindernissen prüfen
 	int xWall = 0;
 	int yWall = 0;
 	for (int i = 0; i < counterWall; i++)
 	{
 		xWall = wallArray[i][0];
 		yWall = wallArray[i][1];
-
-		//std::cout << i << "xWall: " << xWall << ", yWall:  " << yWall << std::endl;
 
 		//Berührung von links
 		if (MoveRight && x > ((xWall * 32) - 75) && x < ((xWall * 32) + 10 - 75) && y > ((yWall * 32) - 75) && y < ((yWall * 32) + 32))
@@ -952,7 +940,7 @@ void Game::update()
 	}
 
 
-	//Punkt wieder von der Karte entfernen
+	//Punkt erreicht? Entsprechenden Punkt von der Karte entfernen
 	if (arrayFuellmenge > 0)
 	{
 		for (int i = 0; i < arrayFuellmenge; i++)
@@ -963,7 +951,7 @@ void Game::update()
 
 			if (x >= pointX - 75 && x <= pointX && y >= pointY - 75 && y <= pointY)
 			{
-				cout << "Punkt erreicht";
+				//cout << "Punkt erreicht";
 				map->ChangeMapRemovePoint(points[i][1], points[i][0], level);
 
 				//Anzeige des Scores erhöhen
@@ -993,6 +981,7 @@ void Game::update()
 
 	}
 
+	//Bonuspunkt erreicht? Bonuspunkt entfernen
 	if (bonusOnMap)
 	{
 		int pointX = bonusPointX * 32 + 16;
@@ -1000,14 +989,14 @@ void Game::update()
 
 		if (x >= pointX - 75 && x <= pointX && y >= pointY - 75 && y <= pointY)
 		{
-			cout << "Bonus erreicht";
+			//cout << "Bonuspunkt erreicht";
 			map->ChangeMapRemovePoint(bonusPointY, bonusPointX, level);
 
 			bonusOnMap = false;
 			countBonusPoints++;
 
 
-			//Anzeige Bonuspunkte
+			//Anzeige Bonuspunkte aktualisieren
 			std::string tmpBonusNumber = std::to_string(countBonusPoints);
 			char const* bonus_char = tmpBonusNumber.c_str();
 			SDL_Surface* bonusNumberS = TTF_RenderText_Solid(font42, bonus_char, green);

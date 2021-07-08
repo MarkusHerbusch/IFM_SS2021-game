@@ -435,8 +435,6 @@ struct IntPair Map::ChangeMapAddPoint(int level, bool red)
 	std::uniform_int_distribution<int> distr2(6, 48);
 	int randomNumber2 = distr2(eng);
 
-	//cout << "Zahl1: " << randomNumber1 << endl;
-	//cout << "Zahl2: " << randomNumber2 << endl;
 
 	
 	

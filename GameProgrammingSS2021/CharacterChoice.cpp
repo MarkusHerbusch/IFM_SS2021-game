@@ -333,7 +333,7 @@ void CharacterChoice::handleEvents()
 void CharacterChoice::render()
 {
 	SDL_RenderClear(renderer);
-	//this is where we would add stuff to render
+	
 	SDL_RenderCopy(renderer, player1Tex, NULL, &player1R);
 	SDL_RenderCopy(renderer, player2Tex, NULL, &player2R);
 	SDL_RenderCopy(renderer, player3Tex, NULL, &player3R);

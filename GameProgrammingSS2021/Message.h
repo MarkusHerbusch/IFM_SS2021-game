@@ -17,7 +17,6 @@ public:
 	void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, int gamescore, int gamelevel, bool time);
 
 	void handleEvents();
-	//void update();
 	void render();
 	void clean();
 
